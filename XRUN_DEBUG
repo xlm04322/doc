@@ -1,0 +1,41 @@
+XRUN DEBUG
+2015年05月16日 14:31:57
+阅读数：3357
+当遇到声音卡顿时，一般是遭遇xrun了，调试的时候可以通过alsa提供的xrun_debug接口来获取更多有用的信息，帮助定位问题。
+
+原文：http://www.alsa-project.org/main/index.php/XRUN_Debug
+
+This page describes the build-in ALSA driver tool to debug PCM ring buffer positions.
+
+/proc/asound/card#/pcm0p/xrun_debug
+Replace '#' with your card number (usually 0). This proc file can enable various debugging tools. The CONFIG_SND_PCM_XRUN_DEBUG, CONFIG_SND_VERBOSE_PROCFS, CONFIG_SND_DEBUG options must be enabled in your kernel (if xrun_debug proc file is present - this feature is enabled).
+
+ 1   Basic debugging - show xruns in ksyslog interface
+ 2   Dump stack - dump stack for basic debugging
+ 4   Jiffies check - compare the position with kernel jiffies (a sort of in-kernel monotonic clock),
+     show what's changed when basic debugging is enabled
+ 8   Dump positions on each period update call
+ 16  Dump positions on each hardware pointer update call
+ 32  Enable logging of last 10 ring buffer positions
+ 64  Show the last 10 ring buffer position only once (when first error situation occured)
+To enable more features just do sum values of above (for example 1+2=3).
+
+Some good value combinations:
+
+ # Enable basic debugging and dump stack
+ # Usefull to just see, if PCM stream is stopped for a reason (usually wrong audio process timing from scheduler)
+ echo 3 > /proc/asound/card0/pcm0p/xrun_debug
+ # Enable basic debugging and dump stack, check hardware pointer on the period update
+ # Usefull to just see, if PCM stream is stopped for a reason (usually wrong audio process timing from scheduler)
+ # And to check the values from driver
+ echo 11 > /proc/asound/card0/pcm0p/xrun_debug
+ # Enable basic debugging and dump stack, check hardware pointer on all updates
+ # Usefull to just see, if PCM stream is stopped for a reason (usually wrong audio process timing from scheduler)
+ # And to do the exact check the values from driver
+ echo 27 > /proc/asound/card0/pcm0p/xrun_debug
+ # Enable basic debugging, do jiffies check and enable one shot dump of last 10 ring buffer positions
+ # Usefull, when the position is broken only after some of time (to reduce ksyslog messages)
+ echo 101 > /proc/asound/card0/pcm0p/xrun_debug
+ # Enable basic debugging, do jiffies check and dump position on each period and hardware pointer update calls
+ # Usefull when the lowlevel (specific) hardware driver is somehow broken
+ echo 29 > /proc/asound/card0/pcm0p/xrun_debug
