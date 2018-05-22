@@ -1,0 +1,3281 @@
+<!DOCTYPE html>
+<!-- saved from url=(0038)https://www.jianshu.com/p/ac00d59993aa -->
+<html><!--<![endif]--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+
+  <!-- Start of Baidu Transcode -->
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta name="applicable-device" content="pc,mobile">
+  <meta name="MobileOptimized" content="width">
+  <meta name="HandheldFriendly" content="true">
+  <meta name="mobile-agent" content="format=html5;url=https://www.jianshu.com/p/ac00d59993aa">
+  <!-- End of Baidu Transcode -->
+
+    <meta name="description" content="注：原文地址 1. JNI 概念 1.1 概念 JNI 全称 Java Native Interface，Java 本地化接口，可以通过 JNI 调用系统提供的 API。操作系统，无论是 Linux，Windows 还是 Mac OS，或者一些汇编语言写的底层硬件驱动都是 C/C++ 写的。Java和C/C++不同 ，它不会直接编译成平台机器码，而是编译成虚拟机可以运行的Java字节码的.c...">
+
+  <meta name="360-site-verification" content="604a14b53c6b871206001285921e81d8">
+  <meta property="wb:webmaster" content="294ec9de89e7fadb">
+  <meta property="qc:admins" content="104102651453316562112116375">
+  <meta property="qc:admins" content="11635613706305617">
+  <meta property="qc:admins" content="1163561616621163056375">
+  <meta name="google-site-verification" content="cV4-qkUJZR6gmFeajx_UyPe47GW9vY6cnCrYtCHYNh4">
+  <meta name="google-site-verification" content="HF7lfF8YEGs1qtCE-kPml8Z469e2RHhGajy6JPVy5XI">
+  <meta http-equiv="mobile-agent" content="format=html5; url=https://www.jianshu.com/p/ac00d59993aa">
+
+  <!-- Apple -->
+  <meta name="apple-mobile-web-app-title" content="简书">
+
+    <!--  Meta for Smart App Banner -->
+  <meta name="apple-itunes-app" content="app-id=888237539, app-argument=jianshu://notes/15162587">
+  <!-- End -->
+
+  <!--  Meta for Twitter Card -->
+  <meta content="summary" property="twitter:card">
+  <meta content="@jianshucom" property="twitter:site">
+  <meta content="Android NDK开发：JNI基础篇" property="twitter:title">
+  <meta content="注：原文地址 1. JNI 概念 1.1 概念 JNI 全称 Java Native Interface，Java 本地化接口，可以通过 JNI 调用系统提供的 API。操作..." property="twitter:description">
+  <meta content="https://www.jianshu.com/p/ac00d59993aa" property="twitter:url">
+  <!-- End -->
+
+  <!--  Meta for OpenGraph -->
+  <meta property="fb:app_id" content="865829053512461">
+  <meta property="og:site_name" content="简书">
+  <meta property="og:title" content="Android NDK开发：JNI基础篇">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://www.jianshu.com/p/ac00d59993aa">
+  <meta property="og:description" content="注：原文地址 1. JNI 概念 1.1 概念 JNI 全称 Java Native Interface，Java 本地化接口，可以通过 JNI 调用系统提供的 API。操作系统，无论是 Lin...">
+  <!-- End -->
+
+  <!--  Meta for Facebook Applinks -->
+  <meta property="al:ios:url" content="jianshu://notes/15162587">
+  <meta property="al:ios:app_store_id" content="888237539">
+  <meta property="al:ios:app_name" content="简书">
+
+  <meta property="al:android:url" content="jianshu://notes/15162587">
+  <meta property="al:android:package" content="com.jianshu.haruki">
+  <meta property="al:android:app_name" content="简书">
+  <!-- End -->
+
+
+    <title>Android NDK开发：JNI基础篇 - 简书</title>
+
+  <meta name="csrf-param" content="authenticity_token">
+<meta name="csrf-token" content="FpZZBsKWKkfA4K7eByqiR4pqakUmrfIQAZ4sbWLyw54wM40yZaQ8lJCNRKwVJTbVln0u+n4DtIgrWYlRfxR+qA==">
+
+  <link rel="stylesheet" media="all" href="./Android NDK开发：JNI基础篇 - 简书_files/web-56188f038c06ce022e40.css">
+  
+  <link rel="stylesheet" media="all" href="./Android NDK开发：JNI基础篇 - 简书_files/entry-a9201972e0c141d2fe27.css">
+
+  <link href="https://cdn2.jianshu.io/assets/favicons/favicon-e743bfb1821442341c3ab15bdbe804f7ad97676bd07a770ccc9483473aa76f06.ico" rel="shortcut icon" type="image/x-icon">
+      <link rel="apple-touch-icon-precomposed" href="https://cdn2.jianshu.io/assets/apple-touch-icons/57-a6f1f1ee62ace44f6dc2f6a08575abd3c3b163288881c78dd8d75247682a4b27.png" sizes="57x57">
+      <link rel="apple-touch-icon-precomposed" href="https://cdn2.jianshu.io/assets/apple-touch-icons/72-fb9834bcfce738fd7b9c5e31363e79443e09a81a8e931170b58bc815387c1562.png" sizes="72x72">
+      <link rel="apple-touch-icon-precomposed" href="https://cdn2.jianshu.io/assets/apple-touch-icons/76-49d88e539ff2489475d603994988d871219141ecaa0b1a7a9a1914f4fe3182d6.png" sizes="76x76">
+      <link rel="apple-touch-icon-precomposed" href="https://cdn2.jianshu.io/assets/apple-touch-icons/114-24252fe693524ed3a9d0905e49bff3cbd0228f25a320aa09053c2ebb4955de97.png" sizes="114x114">
+      <link rel="apple-touch-icon-precomposed" href="https://cdn2.jianshu.io/assets/apple-touch-icons/120-1bb7371f5e87f93ce780a5f1a05ff1b176828ee0d1d130e768575918a2e05834.png" sizes="120x120">
+      <link rel="apple-touch-icon-precomposed" href="https://cdn2.jianshu.io/assets/apple-touch-icons/152-bf209460fc1c17bfd3e2b84c8e758bc11ca3e570fd411c3bbd84149b97453b99.png" sizes="152x152">
+
+  <!-- Start of 访问统计 -->
+    <script src="./Android NDK开发：JNI基础篇 - 简书_files/push.js"></script><script src="./Android NDK开发：JNI基础篇 - 简书_files/hm.js"></script><script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?0c0e9d9b1e7d617b3e6842e85b9fb068";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+  <!-- End of 访问统计 -->
+<style type="text/css">fieldset[disabled] .multiselect {
+  pointer-events: none;
+}
+
+.multiselect__spinner {
+  position: absolute;
+  right: 1px;
+  top: 1px;
+  width: 48px;
+  height: 35px;
+  background: #fff;
+  display: block;
+}
+
+.multiselect__spinner:after,
+.multiselect__spinner:before {
+  position: absolute;
+  content: "";
+  top: 50%;
+  left: 50%;
+  margin: -8px 0 0 -8px;
+  width: 16px;
+  height: 16px;
+  border-radius: 100%;
+  border-color: #41b883 transparent transparent;
+  border-style: solid;
+  border-width: 2px;
+  box-shadow: 0 0 0 1px transparent;
+}
+
+.multiselect__spinner:before {
+  animation: a 2.4s cubic-bezier(.41,.26,.2,.62);
+  animation-iteration-count: infinite;
+}
+
+.multiselect__spinner:after {
+  animation: a 2.4s cubic-bezier(.51,.09,.21,.8);
+  animation-iteration-count: infinite;
+}
+
+.multiselect__loading-enter-active,
+.multiselect__loading-leave-active {
+  transition: opacity .4s ease-in-out;
+  opacity: 1;
+}
+
+.multiselect__loading-enter,
+.multiselect__loading-leave-active {
+  opacity: 0;
+}
+
+.multiselect,
+.multiselect__input,
+.multiselect__single {
+  font-family: inherit;
+  font-size: 14px;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+}
+
+.multiselect {
+  box-sizing: content-box;
+  display: block;
+  position: relative;
+  width: 100%;
+  min-height: 40px;
+  text-align: left;
+  color: #35495e;
+}
+
+.multiselect * {
+  box-sizing: border-box;
+}
+
+.multiselect:focus {
+  outline: none;
+}
+
+.multiselect--disabled {
+  opacity: .6;
+}
+
+.multiselect--active {
+  z-index: 1;
+}
+
+.multiselect--active:not(.multiselect--above) .multiselect__current,
+.multiselect--active:not(.multiselect--above) .multiselect__input,
+.multiselect--active:not(.multiselect--above) .multiselect__tags {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.multiselect--active .multiselect__select {
+  transform: rotate(180deg);
+}
+
+.multiselect--above.multiselect--active .multiselect__current,
+.multiselect--above.multiselect--active .multiselect__input,
+.multiselect--above.multiselect--active .multiselect__tags {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.multiselect__input,
+.multiselect__single {
+  position: relative;
+  display: inline-block;
+  min-height: 20px;
+  line-height: 20px;
+  border: none;
+  border-radius: 5px;
+  background: #fff;
+  padding: 0 0 0 5px;
+  width: 100%;
+  transition: border .1s ease;
+  box-sizing: border-box;
+  margin-bottom: 8px;
+  vertical-align: top;
+}
+
+.multiselect__tag~.multiselect__input,
+.multiselect__tag~.multiselect__single {
+  width: auto;
+}
+
+.multiselect__input:hover,
+.multiselect__single:hover {
+  border-color: #cfcfcf;
+}
+
+.multiselect__input:focus,
+.multiselect__single:focus {
+  border-color: #a8a8a8;
+  outline: none;
+}
+
+.multiselect__single {
+  padding-left: 6px;
+  margin-bottom: 8px;
+}
+
+.multiselect__tags-wrap {
+  display: inline;
+}
+
+.multiselect__tags {
+  min-height: 40px;
+  display: block;
+  padding: 8px 40px 0 8px;
+  border-radius: 5px;
+  border: 1px solid #e8e8e8;
+  background: #fff;
+}
+
+.multiselect__tag {
+  position: relative;
+  display: inline-block;
+  padding: 4px 26px 4px 10px;
+  border-radius: 5px;
+  margin-right: 10px;
+  color: #fff;
+  line-height: 1;
+  background: #41b883;
+  margin-bottom: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 100%;
+  text-overflow: ellipsis;
+}
+
+.multiselect__tag-icon {
+  cursor: pointer;
+  margin-left: 7px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  font-weight: 700;
+  font-style: normal;
+  width: 22px;
+  text-align: center;
+  line-height: 22px;
+  transition: all .2s ease;
+  border-radius: 5px;
+}
+
+.multiselect__tag-icon:after {
+  content: "\D7";
+  color: #266d4d;
+  font-size: 14px;
+}
+
+.multiselect__tag-icon:focus,
+.multiselect__tag-icon:hover {
+  background: #369a6e;
+}
+
+.multiselect__tag-icon:focus:after,
+.multiselect__tag-icon:hover:after {
+  color: #fff;
+}
+
+.multiselect__current {
+  min-height: 40px;
+  overflow: hidden;
+  padding: 8px 12px 0;
+  padding-right: 30px;
+  white-space: nowrap;
+  border-radius: 5px;
+  border: 1px solid #e8e8e8;
+}
+
+.multiselect__current,
+.multiselect__select {
+  line-height: 16px;
+  box-sizing: border-box;
+  display: block;
+  margin: 0;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.multiselect__select {
+  position: absolute;
+  width: 40px;
+  height: 38px;
+  right: 1px;
+  top: 1px;
+  padding: 4px 8px;
+  text-align: center;
+  transition: transform .2s ease;
+}
+
+.multiselect__select:before {
+  position: relative;
+  right: 0;
+  top: 65%;
+  color: #999;
+  margin-top: 4px;
+  border-style: solid;
+  border-width: 5px 5px 0;
+  border-color: #999 transparent transparent;
+  content: "";
+}
+
+.multiselect__placeholder {
+  color: #adadad;
+  display: inline-block;
+  margin-bottom: 10px;
+  padding-top: 2px;
+}
+
+.multiselect--active .multiselect__placeholder {
+  display: none;
+}
+
+.multiselect__content-wrapper {
+  position: absolute;
+  display: block;
+  background: #fff;
+  width: 100%;
+  max-height: 240px;
+  overflow: auto;
+  border: 1px solid #e8e8e8;
+  border-top: none;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  z-index: 1;
+  -webkit-overflow-scrolling: touch;
+}
+
+.multiselect__content {
+  list-style: none;
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+  min-width: 100%;
+  vertical-align: top;
+}
+
+.multiselect--above .multiselect__content-wrapper {
+  bottom: 100%;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom: none;
+  border-top: 1px solid #e8e8e8;
+}
+
+.multiselect__content::webkit-scrollbar {
+  display: none;
+}
+
+.multiselect__element {
+  display: block;
+}
+
+.multiselect__option {
+  display: block;
+  padding: 12px;
+  min-height: 40px;
+  line-height: 16px;
+  text-decoration: none;
+  text-transform: none;
+  vertical-align: middle;
+  position: relative;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.multiselect__option:after {
+  top: 0;
+  right: 0;
+  position: absolute;
+  line-height: 40px;
+  padding-right: 12px;
+  padding-left: 20px;
+}
+
+.multiselect__option--highlight {
+  background: #41b883;
+  outline: none;
+  color: #fff;
+}
+
+.multiselect__option--highlight:after {
+  content: attr(data-select);
+  background: #41b883;
+  color: #fff;
+}
+
+.multiselect__option--selected {
+  background: #f3f3f3;
+  color: #35495e;
+  font-weight: 700;
+}
+
+.multiselect__option--selected:after {
+  content: attr(data-selected);
+  color: silver;
+}
+
+.multiselect__option--selected.multiselect__option--highlight {
+  background: #ff6a6a;
+  color: #fff;
+}
+
+.multiselect__option--selected.multiselect__option--highlight:after {
+  background: #ff6a6a;
+  content: attr(data-deselect);
+  color: #fff;
+}
+
+.multiselect--disabled {
+  background: #ededed;
+  pointer-events: none;
+}
+
+.multiselect--disabled .multiselect__current,
+.multiselect--disabled .multiselect__select,
+.multiselect__option--disabled {
+  background: #ededed;
+  color: #a6a6a6;
+}
+
+.multiselect__option--disabled {
+  cursor: text;
+  pointer-events: none;
+}
+
+.multiselect__option--disabled.multiselect__option--highlight {
+  background: #dedede!important;
+}
+
+.multiselect-enter-active,
+.multiselect-leave-active {
+  transition: all .15s ease;
+}
+
+.multiselect-enter,
+.multiselect-leave-active {
+  opacity: 0;
+}
+
+.multiselect__strong {
+  margin-bottom: 8px;
+  line-height: 20px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+[dir=rtl] .multiselect {
+  text-align: right;
+}
+
+[dir=rtl] .multiselect__select {
+  right: auto;
+  left: 1px;
+}
+
+[dir=rtl] .multiselect__tags {
+  padding: 8px 8px 0 40px;
+}
+
+[dir=rtl] .multiselect__content {
+  text-align: right;
+}
+
+[dir=rtl] .multiselect__option:after {
+  right: auto;
+  left: 0;
+}
+
+[dir=rtl] .multiselect__clear {
+  right: auto;
+  left: 12px;
+}
+
+[dir=rtl] .multiselect__spinner {
+  right: auto;
+  left: 1px;
+}
+
+@keyframes a {
+  0% {
+    transform: rotate(0);
+  }
+
+  to {
+    transform: rotate(2turn);
+  }
+}</style><style type="text/css">@font-face {
+  font-family: 'KaTeX_AMS';
+  src: url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_AMS-Regular-3d8245dcb4489694a6a263b05c1cca01.woff2) format('woff2'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_AMS-Regular-ac1d46d953d403677171697581a284d2.woff) format('woff'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_AMS-Regular-c67be87adba7d31c013be127b936233d.ttf) format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'KaTeX_Caligraphic';
+  src: url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Caligraphic-Bold-970d3e76493b82fccf21ad5888ddee77.woff2) format('woff2'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Caligraphic-Bold-445f96a387df0d13ded71f27c608516d.woff) format('woff'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Caligraphic-Bold-3f61a84d76e80396489d32bc9dd8d444.ttf) format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'KaTeX_Caligraphic';
+  src: url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Caligraphic-Regular-0ef0f2e356a2e1c457b6585d34edae77.woff2) format('woff2'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Caligraphic-Regular-74f6918c7d2b768ffd32048102bc0172.woff) format('woff'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Caligraphic-Regular-c3bc8fcec0e85a50cabf71e4e8074991.ttf) format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'KaTeX_Fraktur';
+  src: url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Fraktur-Bold-950649ba5e5cfd37cdad74095411d350.woff2) format('woff2'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Fraktur-Bold-1aca7ef7f976fb54a207ffc8aa180e38.woff) format('woff'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Fraktur-Bold-e11e6bf02fc41279a540d3655abf3b07.ttf) format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'KaTeX_Fraktur';
+  src: url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Fraktur-Regular-135ccd74931753318f6f52f3fce19018.woff2) format('woff2'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Fraktur-Regular-c5b430bfcb3e5423b77401afcdb69b66.woff) format('woff'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Fraktur-Regular-a9509497466d16e6b7265a223ea39093.ttf) format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'KaTeX_Main';
+  src: url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Main-Bold-82bce349c8ff0927380b5177e9258ad0.woff2) format('woff2'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Main-Bold-29d4b276c622ff1d1376d9afcbd2f25a.woff) format('woff'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Main-Bold-db576c7d5d6eb6ebefc9b334f4140d42.ttf) format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'KaTeX_Main';
+  src: url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Main-BoldItalic-13900e552dbf51aead905f897043226c.woff2) format('woff2'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Main-BoldItalic-3f3be43bbdd58a4a86c8eddd3d39a26a.woff) format('woff'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Main-BoldItalic-cec43f729e0e6810c3433f6020ec676e.ttf) format('truetype');
+  font-weight: bold;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'KaTeX_Main';
+  src: url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Main-Italic-b488f60f79c9d1f533def644385d8219.woff2) format('woff2'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Main-Italic-f8a754484e776e94b6116dfbcb1761a7.woff) format('woff'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Main-Italic-85b3329fdb41fadfb0fdc01ec5290b2f.ttf) format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'KaTeX_Main';
+  src: url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Main-Regular-999cd6bac6e8118065ac500d4f133c63.woff2) format('woff2'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Main-Regular-485696cf1d821baac6ae06c42e09faef.woff) format('woff'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Main-Regular-f4fe6dca4a5f5520ae0caab31848aae3.ttf) format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'KaTeX_Math';
+  src: url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Math-Italic-7a31741a44e58952cb4b8a763c206fcd.woff2) format('woff2'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Math-Italic-8eb56b3ff5b141cd3732a24e65c2b339.woff) format('woff'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Math-Italic-10740d7488d690a743339650103f1cb3.ttf) format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'KaTeX_SansSerif';
+  src: url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_SansSerif-Bold-0d0f967a34b828083a11bb264e578c32.woff2) format('woff2'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_SansSerif-Bold-99bd87431ac7ef8f27591f72d7812509.woff) format('woff'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_SansSerif-Bold-771a1f955e7ff2106402b58d1e8a1ad2.ttf) format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'KaTeX_SansSerif';
+  src: url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_SansSerif-Italic-b1ac79b9b69c954bbeb8fc02500832e0.woff2) format('woff2'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_SansSerif-Italic-9c3f03ec809c6f298d716cbda8260fcb.woff) format('woff'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_SansSerif-Italic-cb729d47fbd26ff0ae62bb840085e5b5.ttf) format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'KaTeX_SansSerif';
+  src: url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_SansSerif-Regular-23f1730fda70ec6ec6aa789979890cba.woff2) format('woff2'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_SansSerif-Regular-fc90839714a9e877682309c3daf7493e.woff) format('woff'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_SansSerif-Regular-43b0cb92c2405f175772931ccd68002e.ttf) format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'KaTeX_Script';
+  src: url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Script-Regular-ae1fad1f4d1c227c9d567da8ea9f988c.woff2) format('woff2'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Script-Regular-60febfa114c5e32f0ce73050476aa39f.woff) format('woff'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Script-Regular-e9169ca7b32608b6235ec9ffff742a71.ttf) format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'KaTeX_Size1';
+  src: url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Size1-Regular-fda0824e8cfb676664ad063c367cfce3.woff2) format('woff2'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Size1-Regular-1d6cf6b89f694dc76e13ecc4e8214dd2.woff) format('woff'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Size1-Regular-f2e296ef7cef0f6f16912e5d171929b2.ttf) format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'KaTeX_Size2';
+  src: url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Size2-Regular-a7a0eb93afb696cb9b4efb87e6cd45a3.woff2) format('woff2'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Size2-Regular-f48e83b7bcaa68a86a78e8edfee1a04e.woff) format('woff'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Size2-Regular-0767ede65042583bcc06f09055f4d7ca.ttf) format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'KaTeX_Size3';
+  src: url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Size3-Regular-397bd6872be7adff4f000c49fa85a9c3.woff2) format('woff2'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Size3-Regular-0387ab387ace32f15b43c3a4a39f187f.woff) format('woff'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Size3-Regular-882f723427a0986846fe786bd8d6f6c7.ttf) format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'KaTeX_Size4';
+  src: url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Size4-Regular-3c14ed11dd8eea981c93bf283193856d.woff2) format('woff2'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Size4-Regular-726db3bd435c8a6e45e44741dae67263.woff) format('woff'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Size4-Regular-27901d5ce93d8971c416d9123fedb911.ttf) format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'KaTeX_Typewriter';
+  src: url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Typewriter-Regular-895baecfbf4ef298fdfe943fb117c15e.woff2) format('woff2'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Typewriter-Regular-696705de367f02534e8abb38b55af067.woff) format('woff'), url(//cdn2.jianshu.io/assets/_/_/_/_/shared/node_modules/katex/dist/fonts/KaTeX_Typewriter-Regular-6374f53e08c02d7b9ec594e2fb0c5fe8.ttf) format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.katex-display {
+  display: block;
+  margin: 1em 0;
+  text-align: center;
+}
+
+.katex-display > .katex {
+  display: inline-block;
+  text-align: initial;
+}
+
+.katex {
+  font: normal 1.21em KaTeX_Main, Times New Roman, serif;
+  line-height: 1.2;
+  white-space: nowrap;
+  text-indent: 0;
+  text-rendering: auto;
+}
+
+.katex * {
+  -ms-high-contrast-adjust: none !important;
+}
+
+.katex .katex-html {
+  display: inline-block;
+}
+
+.katex .katex-mathml {
+  position: absolute;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 0;
+  border: 0;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+}
+
+.katex .base {
+  position: relative;
+  display: inline-block;
+}
+
+.katex .strut {
+  display: inline-block;
+}
+
+.katex .textbf {
+  font-weight: bold;
+}
+
+.katex .textit {
+  font-style: italic;
+}
+
+.katex .textrm {
+  font-family: KaTeX_Main;
+}
+
+.katex .textsf {
+  font-family: KaTeX_SansSerif;
+}
+
+.katex .texttt {
+  font-family: KaTeX_Typewriter;
+}
+
+.katex .mathit {
+  font-family: KaTeX_Math;
+  font-style: italic;
+}
+
+.katex .mathrm {
+  font-style: normal;
+}
+
+.katex .mathbf {
+  font-family: KaTeX_Main;
+  font-weight: bold;
+}
+
+.katex .boldsymbol {
+  font-family: KaTeX_Math;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.katex .amsrm {
+  font-family: KaTeX_AMS;
+}
+
+.katex .mathbb {
+  font-family: KaTeX_AMS;
+}
+
+.katex .mathcal {
+  font-family: KaTeX_Caligraphic;
+}
+
+.katex .mathfrak {
+  font-family: KaTeX_Fraktur;
+}
+
+.katex .mathtt {
+  font-family: KaTeX_Typewriter;
+}
+
+.katex .mathscr {
+  font-family: KaTeX_Script;
+}
+
+.katex .mathsf {
+  font-family: KaTeX_SansSerif;
+}
+
+.katex .mainit {
+  font-family: KaTeX_Main;
+  font-style: italic;
+}
+
+.katex .mainrm {
+  font-family: KaTeX_Main;
+  font-style: normal;
+}
+
+.katex .vlist-t {
+  display: inline-table;
+  table-layout: fixed;
+}
+
+.katex .vlist-r {
+  display: table-row;
+}
+
+.katex .vlist {
+  display: table-cell;
+  vertical-align: bottom;
+  position: relative;
+}
+
+.katex .vlist > span {
+  display: block;
+  height: 0;
+  position: relative;
+}
+
+.katex .vlist > span > span {
+  display: inline-block;
+}
+
+.katex .vlist > span > .pstrut {
+  overflow: hidden;
+  width: 0;
+}
+
+.katex .vlist-t2 {
+  margin-right: -2px;
+}
+
+.katex .vlist-s {
+  display: table-cell;
+  vertical-align: bottom;
+  font-size: 1px;
+  width: 2px;
+}
+
+.katex .msupsub {
+  text-align: left;
+}
+
+.katex .mfrac > span > span {
+  text-align: center;
+}
+
+.katex .mfrac .frac-line {
+  display: inline-block;
+  width: 100%;
+}
+
+.katex .mspace {
+  display: inline-block;
+}
+
+.katex .mspace.negativethinspace {
+  margin-left: -0.16667em;
+}
+
+.katex .mspace.muspace {
+  width: 0.055556em;
+}
+
+.katex .mspace.thinspace {
+  width: 0.16667em;
+}
+
+.katex .mspace.negativemediumspace {
+  margin-left: -0.22222em;
+}
+
+.katex .mspace.mediumspace {
+  width: 0.22222em;
+}
+
+.katex .mspace.thickspace {
+  width: 0.27778em;
+}
+
+.katex .mspace.sixmuspace {
+  width: 0.333333em;
+}
+
+.katex .mspace.eightmuspace {
+  width: 0.444444em;
+}
+
+.katex .mspace.enspace {
+  width: 0.5em;
+}
+
+.katex .mspace.twelvemuspace {
+  width: 0.666667em;
+}
+
+.katex .mspace.quad {
+  width: 1em;
+}
+
+.katex .mspace.qquad {
+  width: 2em;
+}
+
+.katex .llap,
+.katex .rlap,
+.katex .clap {
+  width: 0;
+  position: relative;
+}
+
+.katex .llap > .inner,
+.katex .rlap > .inner,
+.katex .clap > .inner {
+  position: absolute;
+}
+
+.katex .llap > .fix,
+.katex .rlap > .fix,
+.katex .clap > .fix {
+  display: inline-block;
+}
+
+.katex .llap > .inner {
+  right: 0;
+}
+
+.katex .rlap > .inner,
+.katex .clap > .inner {
+  left: 0;
+}
+
+.katex .clap > .inner > span {
+  margin-left: -50%;
+  margin-right: 50%;
+}
+
+.katex .rule {
+  display: inline-block;
+  border: solid 0;
+  position: relative;
+}
+
+.katex .overline .overline-line,
+.katex .underline .underline-line {
+  display: inline-block;
+  width: 100%;
+}
+
+.katex .sqrt > .root {
+  margin-left: 0.27777778em;
+  margin-right: -0.55555556em;
+}
+
+.katex .sizing,
+.katex .fontsize-ensurer {
+  display: inline-block;
+}
+
+.katex .sizing.reset-size1.size1,
+.katex .fontsize-ensurer.reset-size1.size1 {
+  font-size: 1em;
+}
+
+.katex .sizing.reset-size1.size2,
+.katex .fontsize-ensurer.reset-size1.size2 {
+  font-size: 1.2em;
+}
+
+.katex .sizing.reset-size1.size3,
+.katex .fontsize-ensurer.reset-size1.size3 {
+  font-size: 1.4em;
+}
+
+.katex .sizing.reset-size1.size4,
+.katex .fontsize-ensurer.reset-size1.size4 {
+  font-size: 1.6em;
+}
+
+.katex .sizing.reset-size1.size5,
+.katex .fontsize-ensurer.reset-size1.size5 {
+  font-size: 1.8em;
+}
+
+.katex .sizing.reset-size1.size6,
+.katex .fontsize-ensurer.reset-size1.size6 {
+  font-size: 2em;
+}
+
+.katex .sizing.reset-size1.size7,
+.katex .fontsize-ensurer.reset-size1.size7 {
+  font-size: 2.4em;
+}
+
+.katex .sizing.reset-size1.size8,
+.katex .fontsize-ensurer.reset-size1.size8 {
+  font-size: 2.88em;
+}
+
+.katex .sizing.reset-size1.size9,
+.katex .fontsize-ensurer.reset-size1.size9 {
+  font-size: 3.456em;
+}
+
+.katex .sizing.reset-size1.size10,
+.katex .fontsize-ensurer.reset-size1.size10 {
+  font-size: 4.148em;
+}
+
+.katex .sizing.reset-size1.size11,
+.katex .fontsize-ensurer.reset-size1.size11 {
+  font-size: 4.976em;
+}
+
+.katex .sizing.reset-size2.size1,
+.katex .fontsize-ensurer.reset-size2.size1 {
+  font-size: 0.83333333em;
+}
+
+.katex .sizing.reset-size2.size2,
+.katex .fontsize-ensurer.reset-size2.size2 {
+  font-size: 1em;
+}
+
+.katex .sizing.reset-size2.size3,
+.katex .fontsize-ensurer.reset-size2.size3 {
+  font-size: 1.16666667em;
+}
+
+.katex .sizing.reset-size2.size4,
+.katex .fontsize-ensurer.reset-size2.size4 {
+  font-size: 1.33333333em;
+}
+
+.katex .sizing.reset-size2.size5,
+.katex .fontsize-ensurer.reset-size2.size5 {
+  font-size: 1.5em;
+}
+
+.katex .sizing.reset-size2.size6,
+.katex .fontsize-ensurer.reset-size2.size6 {
+  font-size: 1.66666667em;
+}
+
+.katex .sizing.reset-size2.size7,
+.katex .fontsize-ensurer.reset-size2.size7 {
+  font-size: 2em;
+}
+
+.katex .sizing.reset-size2.size8,
+.katex .fontsize-ensurer.reset-size2.size8 {
+  font-size: 2.4em;
+}
+
+.katex .sizing.reset-size2.size9,
+.katex .fontsize-ensurer.reset-size2.size9 {
+  font-size: 2.88em;
+}
+
+.katex .sizing.reset-size2.size10,
+.katex .fontsize-ensurer.reset-size2.size10 {
+  font-size: 3.45666667em;
+}
+
+.katex .sizing.reset-size2.size11,
+.katex .fontsize-ensurer.reset-size2.size11 {
+  font-size: 4.14666667em;
+}
+
+.katex .sizing.reset-size3.size1,
+.katex .fontsize-ensurer.reset-size3.size1 {
+  font-size: 0.71428571em;
+}
+
+.katex .sizing.reset-size3.size2,
+.katex .fontsize-ensurer.reset-size3.size2 {
+  font-size: 0.85714286em;
+}
+
+.katex .sizing.reset-size3.size3,
+.katex .fontsize-ensurer.reset-size3.size3 {
+  font-size: 1em;
+}
+
+.katex .sizing.reset-size3.size4,
+.katex .fontsize-ensurer.reset-size3.size4 {
+  font-size: 1.14285714em;
+}
+
+.katex .sizing.reset-size3.size5,
+.katex .fontsize-ensurer.reset-size3.size5 {
+  font-size: 1.28571429em;
+}
+
+.katex .sizing.reset-size3.size6,
+.katex .fontsize-ensurer.reset-size3.size6 {
+  font-size: 1.42857143em;
+}
+
+.katex .sizing.reset-size3.size7,
+.katex .fontsize-ensurer.reset-size3.size7 {
+  font-size: 1.71428571em;
+}
+
+.katex .sizing.reset-size3.size8,
+.katex .fontsize-ensurer.reset-size3.size8 {
+  font-size: 2.05714286em;
+}
+
+.katex .sizing.reset-size3.size9,
+.katex .fontsize-ensurer.reset-size3.size9 {
+  font-size: 2.46857143em;
+}
+
+.katex .sizing.reset-size3.size10,
+.katex .fontsize-ensurer.reset-size3.size10 {
+  font-size: 2.96285714em;
+}
+
+.katex .sizing.reset-size3.size11,
+.katex .fontsize-ensurer.reset-size3.size11 {
+  font-size: 3.55428571em;
+}
+
+.katex .sizing.reset-size4.size1,
+.katex .fontsize-ensurer.reset-size4.size1 {
+  font-size: 0.625em;
+}
+
+.katex .sizing.reset-size4.size2,
+.katex .fontsize-ensurer.reset-size4.size2 {
+  font-size: 0.75em;
+}
+
+.katex .sizing.reset-size4.size3,
+.katex .fontsize-ensurer.reset-size4.size3 {
+  font-size: 0.875em;
+}
+
+.katex .sizing.reset-size4.size4,
+.katex .fontsize-ensurer.reset-size4.size4 {
+  font-size: 1em;
+}
+
+.katex .sizing.reset-size4.size5,
+.katex .fontsize-ensurer.reset-size4.size5 {
+  font-size: 1.125em;
+}
+
+.katex .sizing.reset-size4.size6,
+.katex .fontsize-ensurer.reset-size4.size6 {
+  font-size: 1.25em;
+}
+
+.katex .sizing.reset-size4.size7,
+.katex .fontsize-ensurer.reset-size4.size7 {
+  font-size: 1.5em;
+}
+
+.katex .sizing.reset-size4.size8,
+.katex .fontsize-ensurer.reset-size4.size8 {
+  font-size: 1.8em;
+}
+
+.katex .sizing.reset-size4.size9,
+.katex .fontsize-ensurer.reset-size4.size9 {
+  font-size: 2.16em;
+}
+
+.katex .sizing.reset-size4.size10,
+.katex .fontsize-ensurer.reset-size4.size10 {
+  font-size: 2.5925em;
+}
+
+.katex .sizing.reset-size4.size11,
+.katex .fontsize-ensurer.reset-size4.size11 {
+  font-size: 3.11em;
+}
+
+.katex .sizing.reset-size5.size1,
+.katex .fontsize-ensurer.reset-size5.size1 {
+  font-size: 0.55555556em;
+}
+
+.katex .sizing.reset-size5.size2,
+.katex .fontsize-ensurer.reset-size5.size2 {
+  font-size: 0.66666667em;
+}
+
+.katex .sizing.reset-size5.size3,
+.katex .fontsize-ensurer.reset-size5.size3 {
+  font-size: 0.77777778em;
+}
+
+.katex .sizing.reset-size5.size4,
+.katex .fontsize-ensurer.reset-size5.size4 {
+  font-size: 0.88888889em;
+}
+
+.katex .sizing.reset-size5.size5,
+.katex .fontsize-ensurer.reset-size5.size5 {
+  font-size: 1em;
+}
+
+.katex .sizing.reset-size5.size6,
+.katex .fontsize-ensurer.reset-size5.size6 {
+  font-size: 1.11111111em;
+}
+
+.katex .sizing.reset-size5.size7,
+.katex .fontsize-ensurer.reset-size5.size7 {
+  font-size: 1.33333333em;
+}
+
+.katex .sizing.reset-size5.size8,
+.katex .fontsize-ensurer.reset-size5.size8 {
+  font-size: 1.6em;
+}
+
+.katex .sizing.reset-size5.size9,
+.katex .fontsize-ensurer.reset-size5.size9 {
+  font-size: 1.92em;
+}
+
+.katex .sizing.reset-size5.size10,
+.katex .fontsize-ensurer.reset-size5.size10 {
+  font-size: 2.30444444em;
+}
+
+.katex .sizing.reset-size5.size11,
+.katex .fontsize-ensurer.reset-size5.size11 {
+  font-size: 2.76444444em;
+}
+
+.katex .sizing.reset-size6.size1,
+.katex .fontsize-ensurer.reset-size6.size1 {
+  font-size: 0.5em;
+}
+
+.katex .sizing.reset-size6.size2,
+.katex .fontsize-ensurer.reset-size6.size2 {
+  font-size: 0.6em;
+}
+
+.katex .sizing.reset-size6.size3,
+.katex .fontsize-ensurer.reset-size6.size3 {
+  font-size: 0.7em;
+}
+
+.katex .sizing.reset-size6.size4,
+.katex .fontsize-ensurer.reset-size6.size4 {
+  font-size: 0.8em;
+}
+
+.katex .sizing.reset-size6.size5,
+.katex .fontsize-ensurer.reset-size6.size5 {
+  font-size: 0.9em;
+}
+
+.katex .sizing.reset-size6.size6,
+.katex .fontsize-ensurer.reset-size6.size6 {
+  font-size: 1em;
+}
+
+.katex .sizing.reset-size6.size7,
+.katex .fontsize-ensurer.reset-size6.size7 {
+  font-size: 1.2em;
+}
+
+.katex .sizing.reset-size6.size8,
+.katex .fontsize-ensurer.reset-size6.size8 {
+  font-size: 1.44em;
+}
+
+.katex .sizing.reset-size6.size9,
+.katex .fontsize-ensurer.reset-size6.size9 {
+  font-size: 1.728em;
+}
+
+.katex .sizing.reset-size6.size10,
+.katex .fontsize-ensurer.reset-size6.size10 {
+  font-size: 2.074em;
+}
+
+.katex .sizing.reset-size6.size11,
+.katex .fontsize-ensurer.reset-size6.size11 {
+  font-size: 2.488em;
+}
+
+.katex .sizing.reset-size7.size1,
+.katex .fontsize-ensurer.reset-size7.size1 {
+  font-size: 0.41666667em;
+}
+
+.katex .sizing.reset-size7.size2,
+.katex .fontsize-ensurer.reset-size7.size2 {
+  font-size: 0.5em;
+}
+
+.katex .sizing.reset-size7.size3,
+.katex .fontsize-ensurer.reset-size7.size3 {
+  font-size: 0.58333333em;
+}
+
+.katex .sizing.reset-size7.size4,
+.katex .fontsize-ensurer.reset-size7.size4 {
+  font-size: 0.66666667em;
+}
+
+.katex .sizing.reset-size7.size5,
+.katex .fontsize-ensurer.reset-size7.size5 {
+  font-size: 0.75em;
+}
+
+.katex .sizing.reset-size7.size6,
+.katex .fontsize-ensurer.reset-size7.size6 {
+  font-size: 0.83333333em;
+}
+
+.katex .sizing.reset-size7.size7,
+.katex .fontsize-ensurer.reset-size7.size7 {
+  font-size: 1em;
+}
+
+.katex .sizing.reset-size7.size8,
+.katex .fontsize-ensurer.reset-size7.size8 {
+  font-size: 1.2em;
+}
+
+.katex .sizing.reset-size7.size9,
+.katex .fontsize-ensurer.reset-size7.size9 {
+  font-size: 1.44em;
+}
+
+.katex .sizing.reset-size7.size10,
+.katex .fontsize-ensurer.reset-size7.size10 {
+  font-size: 1.72833333em;
+}
+
+.katex .sizing.reset-size7.size11,
+.katex .fontsize-ensurer.reset-size7.size11 {
+  font-size: 2.07333333em;
+}
+
+.katex .sizing.reset-size8.size1,
+.katex .fontsize-ensurer.reset-size8.size1 {
+  font-size: 0.34722222em;
+}
+
+.katex .sizing.reset-size8.size2,
+.katex .fontsize-ensurer.reset-size8.size2 {
+  font-size: 0.41666667em;
+}
+
+.katex .sizing.reset-size8.size3,
+.katex .fontsize-ensurer.reset-size8.size3 {
+  font-size: 0.48611111em;
+}
+
+.katex .sizing.reset-size8.size4,
+.katex .fontsize-ensurer.reset-size8.size4 {
+  font-size: 0.55555556em;
+}
+
+.katex .sizing.reset-size8.size5,
+.katex .fontsize-ensurer.reset-size8.size5 {
+  font-size: 0.625em;
+}
+
+.katex .sizing.reset-size8.size6,
+.katex .fontsize-ensurer.reset-size8.size6 {
+  font-size: 0.69444444em;
+}
+
+.katex .sizing.reset-size8.size7,
+.katex .fontsize-ensurer.reset-size8.size7 {
+  font-size: 0.83333333em;
+}
+
+.katex .sizing.reset-size8.size8,
+.katex .fontsize-ensurer.reset-size8.size8 {
+  font-size: 1em;
+}
+
+.katex .sizing.reset-size8.size9,
+.katex .fontsize-ensurer.reset-size8.size9 {
+  font-size: 1.2em;
+}
+
+.katex .sizing.reset-size8.size10,
+.katex .fontsize-ensurer.reset-size8.size10 {
+  font-size: 1.44027778em;
+}
+
+.katex .sizing.reset-size8.size11,
+.katex .fontsize-ensurer.reset-size8.size11 {
+  font-size: 1.72777778em;
+}
+
+.katex .sizing.reset-size9.size1,
+.katex .fontsize-ensurer.reset-size9.size1 {
+  font-size: 0.28935185em;
+}
+
+.katex .sizing.reset-size9.size2,
+.katex .fontsize-ensurer.reset-size9.size2 {
+  font-size: 0.34722222em;
+}
+
+.katex .sizing.reset-size9.size3,
+.katex .fontsize-ensurer.reset-size9.size3 {
+  font-size: 0.40509259em;
+}
+
+.katex .sizing.reset-size9.size4,
+.katex .fontsize-ensurer.reset-size9.size4 {
+  font-size: 0.46296296em;
+}
+
+.katex .sizing.reset-size9.size5,
+.katex .fontsize-ensurer.reset-size9.size5 {
+  font-size: 0.52083333em;
+}
+
+.katex .sizing.reset-size9.size6,
+.katex .fontsize-ensurer.reset-size9.size6 {
+  font-size: 0.5787037em;
+}
+
+.katex .sizing.reset-size9.size7,
+.katex .fontsize-ensurer.reset-size9.size7 {
+  font-size: 0.69444444em;
+}
+
+.katex .sizing.reset-size9.size8,
+.katex .fontsize-ensurer.reset-size9.size8 {
+  font-size: 0.83333333em;
+}
+
+.katex .sizing.reset-size9.size9,
+.katex .fontsize-ensurer.reset-size9.size9 {
+  font-size: 1em;
+}
+
+.katex .sizing.reset-size9.size10,
+.katex .fontsize-ensurer.reset-size9.size10 {
+  font-size: 1.20023148em;
+}
+
+.katex .sizing.reset-size9.size11,
+.katex .fontsize-ensurer.reset-size9.size11 {
+  font-size: 1.43981481em;
+}
+
+.katex .sizing.reset-size10.size1,
+.katex .fontsize-ensurer.reset-size10.size1 {
+  font-size: 0.24108004em;
+}
+
+.katex .sizing.reset-size10.size2,
+.katex .fontsize-ensurer.reset-size10.size2 {
+  font-size: 0.28929605em;
+}
+
+.katex .sizing.reset-size10.size3,
+.katex .fontsize-ensurer.reset-size10.size3 {
+  font-size: 0.33751205em;
+}
+
+.katex .sizing.reset-size10.size4,
+.katex .fontsize-ensurer.reset-size10.size4 {
+  font-size: 0.38572806em;
+}
+
+.katex .sizing.reset-size10.size5,
+.katex .fontsize-ensurer.reset-size10.size5 {
+  font-size: 0.43394407em;
+}
+
+.katex .sizing.reset-size10.size6,
+.katex .fontsize-ensurer.reset-size10.size6 {
+  font-size: 0.48216008em;
+}
+
+.katex .sizing.reset-size10.size7,
+.katex .fontsize-ensurer.reset-size10.size7 {
+  font-size: 0.57859209em;
+}
+
+.katex .sizing.reset-size10.size8,
+.katex .fontsize-ensurer.reset-size10.size8 {
+  font-size: 0.69431051em;
+}
+
+.katex .sizing.reset-size10.size9,
+.katex .fontsize-ensurer.reset-size10.size9 {
+  font-size: 0.83317261em;
+}
+
+.katex .sizing.reset-size10.size10,
+.katex .fontsize-ensurer.reset-size10.size10 {
+  font-size: 1em;
+}
+
+.katex .sizing.reset-size10.size11,
+.katex .fontsize-ensurer.reset-size10.size11 {
+  font-size: 1.19961427em;
+}
+
+.katex .sizing.reset-size11.size1,
+.katex .fontsize-ensurer.reset-size11.size1 {
+  font-size: 0.20096463em;
+}
+
+.katex .sizing.reset-size11.size2,
+.katex .fontsize-ensurer.reset-size11.size2 {
+  font-size: 0.24115756em;
+}
+
+.katex .sizing.reset-size11.size3,
+.katex .fontsize-ensurer.reset-size11.size3 {
+  font-size: 0.28135048em;
+}
+
+.katex .sizing.reset-size11.size4,
+.katex .fontsize-ensurer.reset-size11.size4 {
+  font-size: 0.32154341em;
+}
+
+.katex .sizing.reset-size11.size5,
+.katex .fontsize-ensurer.reset-size11.size5 {
+  font-size: 0.36173633em;
+}
+
+.katex .sizing.reset-size11.size6,
+.katex .fontsize-ensurer.reset-size11.size6 {
+  font-size: 0.40192926em;
+}
+
+.katex .sizing.reset-size11.size7,
+.katex .fontsize-ensurer.reset-size11.size7 {
+  font-size: 0.48231511em;
+}
+
+.katex .sizing.reset-size11.size8,
+.katex .fontsize-ensurer.reset-size11.size8 {
+  font-size: 0.57877814em;
+}
+
+.katex .sizing.reset-size11.size9,
+.katex .fontsize-ensurer.reset-size11.size9 {
+  font-size: 0.69453376em;
+}
+
+.katex .sizing.reset-size11.size10,
+.katex .fontsize-ensurer.reset-size11.size10 {
+  font-size: 0.83360129em;
+}
+
+.katex .sizing.reset-size11.size11,
+.katex .fontsize-ensurer.reset-size11.size11 {
+  font-size: 1em;
+}
+
+.katex .delimsizing.size1 {
+  font-family: KaTeX_Size1;
+}
+
+.katex .delimsizing.size2 {
+  font-family: KaTeX_Size2;
+}
+
+.katex .delimsizing.size3 {
+  font-family: KaTeX_Size3;
+}
+
+.katex .delimsizing.size4 {
+  font-family: KaTeX_Size4;
+}
+
+.katex .delimsizing.mult .delim-size1 > span {
+  font-family: KaTeX_Size1;
+}
+
+.katex .delimsizing.mult .delim-size4 > span {
+  font-family: KaTeX_Size4;
+}
+
+.katex .nulldelimiter {
+  display: inline-block;
+  width: 0.12em;
+}
+
+.katex .delimcenter {
+  position: relative;
+}
+
+.katex .op-symbol {
+  position: relative;
+}
+
+.katex .op-symbol.small-op {
+  font-family: KaTeX_Size1;
+}
+
+.katex .op-symbol.large-op {
+  font-family: KaTeX_Size2;
+}
+
+.katex .op-limits > .vlist-t {
+  text-align: center;
+}
+
+.katex .accent > .vlist-t {
+  text-align: center;
+}
+
+.katex .accent .accent-body {
+  width: 0;
+  position: relative;
+}
+
+.katex .overlay {
+  display: block;
+}
+
+.katex .mtable .vertical-separator {
+  display: inline-block;
+  margin: 0 -0.125em;
+  width: 0.25em;
+}
+
+.katex .mtable .arraycolsep {
+  display: inline-block;
+}
+
+.katex .mtable .col-align-c > .vlist-t {
+  text-align: center;
+}
+
+.katex .mtable .col-align-l > .vlist-t {
+  text-align: left;
+}
+
+.katex .mtable .col-align-r > .vlist-t {
+  text-align: right;
+}
+
+.katex .svg-align {
+  text-align: left;
+}
+
+.katex svg {
+  display: block;
+  position: absolute;
+  width: 100%;
+  fill: currentColor;
+  stroke: currentColor;
+  fill-rule: nonzero;
+  fill-opacity: 1;
+  stroke-width: 1;
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
+  stroke-miterlimit: 4;
+  stroke-dasharray: none;
+  stroke-dashoffset: 0;
+  stroke-opacity: 1;
+}
+
+.katex svg path {
+  stroke: none;
+}
+
+.katex .vertical-separator svg {
+  width: 0.25em;
+}
+
+.katex .stretchy {
+  width: 100%;
+  display: block;
+}
+
+.katex .stretchy:before,
+.katex .stretchy:after {
+  content: "";
+}
+
+.katex .hide-tail {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.katex .halfarrow-left {
+  position: absolute;
+  left: 0;
+  width: 50.1%;
+  overflow: hidden;
+}
+
+.katex .halfarrow-right {
+  position: absolute;
+  right: 0;
+  width: 50%;
+  overflow: hidden;
+}
+
+.katex .brace-left {
+  position: absolute;
+  left: 0;
+  width: 25.1%;
+  overflow: hidden;
+}
+
+.katex .brace-center {
+  position: absolute;
+  left: 25%;
+  width: 50%;
+  overflow: hidden;
+}
+
+.katex .brace-right {
+  position: absolute;
+  right: 0;
+  width: 25.1%;
+  overflow: hidden;
+}
+
+.katex .x-arrow-pad {
+  padding: 0 0.5em;
+}
+
+.katex .x-arrow,
+.katex .mover,
+.katex .munder {
+  text-align: center;
+}
+
+.katex .boxpad {
+  padding: 0 0.3em 0 0.3em;
+}
+
+.katex .fbox {
+  box-sizing: border-box;
+  border: 0.04em solid black;
+}
+
+.katex .fcolorbox {
+  box-sizing: border-box;
+  border: 0.04em solid;
+}
+
+.katex .cancel-pad {
+  padding: 0 0.2em 0 0.2em;
+}
+
+.katex .mord + .cancel-lap,
+.katex .mbin + .cancel-lap {
+  margin-left: -0.2em;
+}
+
+.katex .cancel-lap + .mord,
+.katex .cancel-lap + .mbin,
+.katex .cancel-lap + .msupsub {
+  margin-left: -0.2em;
+}
+
+.katex .sout {
+  border-bottom-style: solid;
+  border-bottom-width: 0.08em;
+}</style><style type="text/css">
+#free-reward-panel .reward-users-modal main {
+  padding: 0;
+}
+</style><style type="text/css">
+@charset "UTF-8";
+/*
+ * 变量
+*/
+.reward-note-modal .v-modal {
+  width: 620px;
+  text-align: center;
+}
+.reward-note-modal .v-modal form {
+    margin: 0 auto 25px auto;
+    padding: 0 40px;
+}
+.reward-note-modal .v-modal .reward-intro {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+.reward-note-modal .v-modal .reward-intro .avatar {
+      cursor: default !important;
+      width: 36px;
+      height: 36px;
+      margin-right: 10px;
+      display: inline-block;
+}
+.reward-note-modal .v-modal .reward-intro .intro {
+      margin-right: 5px;
+      font-weight: bold;
+      vertical-align: middle;
+}
+.reward-note-modal .v-modal .reward-intro i {
+      color: #EA6F5A;
+      vertical-align: middle;
+}
+.reward-note-modal .v-modal .main-inputs {
+    margin: 25px 0;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group {
+      margin: 0 -5px;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group input {
+        display: none;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group input:checked + .option {
+        color: #EA6F5A;
+        border-color: #EA6F5A;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group .custom-amount:checked + .option .custom-text {
+        opacity: 0;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group .custom-amount:checked + .option .custom-amount-input {
+        opacity: 1;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group .option {
+        position: relative;
+        margin: 0 5px 15px;
+        width: 156px;
+        height: 56px;
+        line-height: 54px;
+        border: 1px solid #E6E6E6;
+        border-radius: 4px;
+        font-weight: normal;
+        color: #999999;
+        cursor: pointer;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group .option i {
+          font-size: 16px;
+          vertical-align: middle;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group .option .amount {
+          font-size: 28px;
+          vertical-align: middle;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group .option .piece {
+          font-size: 13px;
+          vertical-align: sub;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group .option .custom-amount-input {
+          position: absolute;
+          top: 0;
+          z-index: -1;
+          width: 100%;
+          opacity: 0;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group .option .custom-amount-input i {
+            position: absolute;
+            top: 0;
+            left: 10px;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group .option .custom-amount-input .piece {
+            position: absolute;
+            top: 4px;
+            right: 10px;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group .option .custom-amount-input input {
+            display: block;
+            margin: 0 auto;
+            width: 80px;
+            height: 54px;
+            line-height: 54px;
+            border: none;
+            font-size: 28px;
+            text-align: center;
+            background: transparent;
+            -moz-appearance: textfield;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group .option .custom-amount-input input::-webkit-outer-spin-button, .reward-note-modal .v-modal .main-inputs .amount-group .option .custom-amount-input input::-webkit-inner-spin-button {
+              -webkit-appearance: none !important;
+}
+.reward-note-modal .v-modal .main-inputs .message {
+      padding: 15px 20px;
+      margin-bottom: 0;
+      font-size: 14px;
+      border: 1px solid #E6E6E6;
+      color: #333333;
+      border-radius: 4px;
+      background-color: rgba(180, 180, 180, 0.1);
+}
+.reward-note-modal .v-modal .main-inputs .message textarea {
+        width: 100%;
+        height: 44px;
+        padding: 0;
+        margin: 0;
+        resize: none;
+        background: none !important;
+        border: none !important;
+        -webkit-box-sizing: border-box;
+                box-sizing: border-box;
+        -webkit-box-shadow: none;
+                box-shadow: none;
+}
+.reward-note-modal .v-modal .main-inputs .message textarea:focus {
+          outline: none;
+}
+.reward-note-modal .v-modal .reward-info .amount {
+    font-size: 28px;
+    font-weight: bold;
+    color: #EA6F5A;
+}
+.reward-note-modal .v-modal .reward-info .pay-method {
+    font-size: 14px;
+}
+.reward-note-modal .v-modal .reward-info .pay-method a {
+      color: #3194D0;
+}
+.reward-note-modal .v-modal .choose-pay {
+    margin: 0 -5px;
+}
+.reward-note-modal .v-modal .choose-pay input {
+      display: none;
+}
+.reward-note-modal .v-modal .choose-pay input:checked + .option {
+      color: #EA6F5A;
+      border-color: #EA6F5A;
+}
+.reward-note-modal .v-modal .choose-pay .option {
+      margin: 20px 5px 10px;
+      width: 156px;
+      height: 56px;
+      line-height: 54px;
+      text-align: center;
+      border: 1px solid #E6E6E6;
+      border-radius: 4px;
+      cursor: pointer;
+}
+.reward-note-modal .v-modal .choose-pay .option img {
+        height: 30px;
+}
+.reward-note-modal .v-modal .choose-pay .option img.day.alipay, .reward-note-modal .v-modal .choose-pay .option img.night.alipay {
+        min-width: 85px;
+}
+.reward-note-modal .v-modal .choose-pay .option img.day.wechat, .reward-note-modal .v-modal .choose-pay .option img.night.wechat {
+        min-width: 112px;
+}
+.reward-note-modal .v-modal .choose-pay .option img.night {
+        display: none;
+}
+.reward-note-modal .v-modal .choose-pay .tooltip {
+      width: 230px;
+}
+.reward-note-modal .v-modal .modal-footer {
+    padding: 0 15px 20px;
+    border: none;
+    background-color: transparent;
+    text-align: center;
+}
+.reward-note-modal .v-modal .modal-footer .btn {
+      padding: 8px 45px;
+      font-size: 24px;
+}
+.reward-note-modal .v-modal .btn-pay {
+    padding: 8px 25px;
+    font-size: 16px;
+    color: #ffffff;
+    background-color: #F5A623;
+}
+.weixin-pay, .success-pay {
+  text-align: center;
+}
+.weixin-pay .v-modal, .success-pay .v-modal {
+    width: 350px;
+}
+.weixin-pay .ic-successed, .success-pay .ic-successed {
+    font-size: 60px;
+    color: #3db922;
+}
+.weixin-pay h2, .weixin-pay h3, .success-pay h2, .success-pay h3 {
+    margin-bottom: 20px;
+    color: #333333;
+}
+.weixin-pay h2, .success-pay h2 {
+    margin: 0 0 40px 0;
+    font-size: 24px;
+}
+.weixin-pay .bind-text, .success-pay .bind-text {
+    position: relative;
+    margin-bottom: 30px;
+    font-size: 14px;
+    color: #999999;
+}
+.weixin-pay .bind-text:before, .weixin-pay .bind-text:after, .success-pay .bind-text:before, .success-pay .bind-text:after {
+      content: "";
+      border-top: 1px solid #999;
+      display: block;
+      position: absolute;
+      width: 40px;
+      top: 8px;
+}
+.weixin-pay .bind-text:before, .success-pay .bind-text:before {
+      left: 30px;
+}
+.weixin-pay .bind-text:after, .success-pay .bind-text:after {
+      right: 30px;
+}
+.weixin-pay .share-bind, .success-pay .share-bind {
+    display: block;
+    margin-bottom: 30px;
+}
+.weixin-pay .share-bind i, .success-pay .share-bind i {
+      margin-right: 4px;
+      font-size: 22px;
+      vertical-align: middle;
+}
+.weixin-pay .share-bind.wechat i, .success-pay .share-bind.wechat i {
+      color: #00BB29;
+}
+.weixin-pay .share-bind.weibo i, .success-pay .share-bind.weibo i {
+      color: #E05244;
+}
+.weixin-pay .wx-qr-code, .success-pay .wx-qr-code {
+    display: inline-block;
+}
+.weixin-pay .wx-qr-code img, .success-pay .wx-qr-code img {
+      margin: 0 auto;
+      padding: 10px;
+      width: 200px;
+      background-color: #ffffff;
+}
+.weixin-pay .pay-amount, .success-pay .pay-amount {
+    margin: 20px 0;
+    color: #787878;
+}
+.weixin-pay .pay-amount span, .success-pay .pay-amount span {
+      color: #F5A623;
+}
+</style><style type="text/css">
+@charset "UTF-8";
+/*
+ * 变量
+*/
+.v-modal-wrap {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  background-color: transparent;
+}
+.v-modal-wrap.modal-leave-active {
+    -webkit-transition: opacity 0.3s;
+    -o-transition: opacity 0.3s;
+    transition: opacity 0.3s;
+}
+.v-modal-wrap.modal-enter-active .v-modal-mask, .v-modal-wrap.modal-leave-active .v-modal-mask {
+    opacity: 0;
+}
+.v-modal-wrap.modal-enter-active .v-modal, .v-modal-wrap.modal-leave-active .v-modal {
+    -webkit-transform: translate(-50%, -70%);
+        -ms-transform: translate(-50%, -70%);
+            transform: translate(-50%, -70%);
+    opacity: 0;
+}
+.v-modal-wrap .v-modal-mask {
+    background-color: rgba(255, 255, 255, 0.7);
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    -webkit-transition: opacity 0.3s;
+    -o-transition: opacity 0.3s;
+    transition: opacity 0.3s;
+    opacity: 1;
+}
+.v-modal-wrap .v-modal {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+    border-radius: 6px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    -webkit-box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+    -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
+    transition: opacity 0.3s, -webkit-transform 0.3s;
+    -o-transition: opacity 0.3s, transform 0.3s;
+    transition: opacity 0.3s, transform 0.3s;
+    transition: opacity 0.3s, transform 0.3s, -webkit-transform 0.3s;
+    opacity: 1;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    overflow: hidden;
+}
+.v-modal-wrap .v-modal > header:before, .v-modal-wrap .v-modal > header:after, .v-modal-wrap .v-modal > main:before, .v-modal-wrap .v-modal > main:after, .v-modal-wrap .v-modal > footer:before, .v-modal-wrap .v-modal > footer:after {
+      content: '';
+      clear: both;
+      display: table;
+}
+.v-modal-wrap .v-modal > header {
+      padding: 20px;
+      border-bottom: 1px solid #F0F0F0;
+}
+.v-modal-wrap .v-modal > header h4 {
+        margin: 0;
+        color: #333;
+        text-align: left;
+}
+.v-modal-wrap .v-modal .close {
+      position: absolute;
+      right: 16px;
+      top: 20px;
+      font-size: 26px;
+      line-height: 20px;
+      color: rgba(0, 0, 0, 0.8);
+}
+.v-modal-wrap .v-modal .close:hover {
+        color: #000000;
+}
+.v-modal-wrap .v-modal > main {
+      padding: 20px 20px 20px 20px;
+      font-size: 15px;
+      color: #333;
+      -webkit-box-flex: 1;
+      -webkit-flex-grow: 1;
+          -ms-flex-positive: 1;
+              flex-grow: 1;
+      overflow-x: hidden;
+      overflow-y: auto;
+}
+.v-modal-wrap .v-modal > footer {
+      padding: 20px;
+      background-color: #fff;
+}
+.v-modal-wrap .v-modal > footer button {
+        padding: 0;
+        margin: 0;
+        background-color: transparent;
+        border: 0;
+        float: right;
+}
+.v-modal-wrap .v-modal > footer button:focus {
+          outline: 0;
+}
+.v-modal-wrap .v-modal > footer .submit {
+        padding: 4px 12px;
+        border: 1px solid;
+        border-radius: 20px;
+}
+.v-modal-wrap .v-modal > footer .cancel {
+        margin-top: 5px;
+}
+.v-modal-wrap .v-modal > footer .cancel:hover {
+          color: #333333;
+}
+.reader-night-mode .v-modal-wrap .v-modal-mask {
+  background-color: rgba(63, 63, 63, 0.7);
+}
+.reader-night-mode .v-modal-wrap .v-modal {
+  background-color: #3f3f3f;
+}
+.reader-night-mode .v-modal-wrap .v-modal header {
+    border-color: #2F2F2F;
+}
+.reader-night-mode .v-modal-wrap .v-modal header h4 {
+      color: #C8C8C8;
+}
+.reader-night-mode .v-modal-wrap .v-modal .close {
+    color: #C8C8C8;
+}
+.reader-night-mode .v-modal-wrap .v-modal .close:hover {
+      color: #ffffff;
+}
+.reader-night-mode .v-modal-wrap .v-modal main {
+    color: #C8C8C8;
+}
+.reader-night-mode .v-modal-wrap .v-modal footer {
+    background-color: #3f3f3f;
+}
+.reader-night-mode .v-modal-wrap .v-modal footer .cancel:hover {
+      color: #C8C8C8;
+}
+</style><style type="text/css">
+@charset "UTF-8";
+/*
+ * 变量
+*/
+.like[data-v-6ddd02c6] {
+  display: inline-block;
+}
+.like .like-group[data-v-6ddd02c6] {
+    position: relative;
+    padding: 13px 0 15px 0;
+    font-size: 0;
+    border: 1px solid #EA6F5A;
+    border-radius: 40px;
+}
+.like .like-group[data-v-6ddd02c6]:hover {
+      background-color: rgba(236, 97, 73, 0.05);
+}
+.like .like-group .btn-like[data-v-6ddd02c6] {
+      display: inline-block;
+      font-size: 19px;
+}
+.like .like-group .btn-like[data-v-6ddd02c6]:before {
+        content: '';
+        position: absolute;
+        left: 12px;
+        top: 2px;
+        width: 50px;
+        height: 50px;
+        background-image: url(//cdn2.jianshu.io/assets/web/like_animation_steps-62a00a7b52377d3069927cdb8e61fd34.png);
+        background-position: left;
+        background-repeat: no-repeat;
+        background-size: 1000px 50px;
+}
+.like .like-group .btn-like a[data-v-6ddd02c6] {
+        position: relative;
+        padding: 18px 30px 18px 55px;
+        color: #EA6F5A;
+}
+.like .like-group .modal-wrap[data-v-6ddd02c6] {
+      font-size: 18px;
+      border-left: 1px solid rgba(236, 97, 73, 0.4);
+      display: inline-block;
+      margin-left: -15px;
+}
+.like .like-group .modal-wrap a[data-v-6ddd02c6] {
+        color: #EA6F5A;
+        padding: 18px 26px 18px 18px;
+}
+.like .like-group.like-animation[data-v-6ddd02c6], .like .like-group.active[data-v-6ddd02c6] {
+      background-color: #EA6F5A;
+}
+.like .like-group.like-animation .btn-like a[data-v-6ddd02c6], .like .like-group.active .btn-like a[data-v-6ddd02c6] {
+        color: white;
+}
+.like .like-group.like-animation .modal-wrap[data-v-6ddd02c6], .like .like-group.active .modal-wrap[data-v-6ddd02c6] {
+        border-left: 1px solid white;
+}
+.like .like-group.like-animation .modal-wrap a[data-v-6ddd02c6], .like .like-group.active .modal-wrap a[data-v-6ddd02c6] {
+          color: white;
+}
+.like .like-group.like-animation .btn-like[data-v-6ddd02c6]:before {
+      -webkit-animation: likeBlast-data-v-6ddd02c6 0.6s 1 steps(19);
+              animation: likeBlast-data-v-6ddd02c6 0.6s 1 steps(19);
+      background-position: right;
+}
+@-webkit-keyframes likeBlast {
+0% {
+    background-position: left;
+}
+100% {
+    background-position: right;
+}
+}
+@keyframes likeBlast-data-v-6ddd02c6 {
+0% {
+    background-position: left;
+}
+100% {
+    background-position: right;
+}
+}
+.like .like-group.active .btn-like[data-v-6ddd02c6]:before {
+      background-position: right;
+}
+</style><style type="text/css">
+@charset "UTF-8";
+/*
+ * 变量
+*/
+.main {
+  position: relative;
+  margin: 0 auto;
+  padding: 0 0 30px 0;
+  width: 620px;
+}
+.main .title {
+    padding-left: 8px;
+    border-left: 3px solid #EA6F5A;
+    line-height: 1;
+    font-size: 15px;
+}
+.main .collection-settings {
+    position: absolute;
+    top: 2px;
+    right: 0;
+    font-size: 13px;
+    color: #A0A0A0;
+}
+.main .collection-settings span {
+      padding-left: 4px;
+}
+.main .include-collection {
+    width: 100%;
+    padding-top: 20px;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    -webkit-box-pack: start;
+    -webkit-justify-content: flex-start;
+        -ms-flex-pack: start;
+            justify-content: flex-start;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+}
+.main .include-collection .item {
+      display: inline-block;
+      margin: 0 12px 12px 0;
+      min-height: 32px;
+      background-color: white;
+      border: 1px solid #DCDCDC;
+      border-radius: 4px;
+      vertical-align: top;
+      overflow: hidden;
+}
+.main .include-collection .item img {
+        width: 32px;
+        height: 32px;
+}
+.main .include-collection .item .name {
+        display: inline-block;
+        padding: 0 10px;
+        font-size: 14px;
+}
+.main .include-collection .add-collection-wrap {
+      margin: 0 12px 12px 0;
+}
+.main .include-collection .add-collection {
+      padding: 8px 12px;
+      font-size: 14px;
+      border: 1px solid #DCDCDC;
+      border-radius: 4px;
+}
+.main .include-collection .add-collection i {
+        margin-right: 4px;
+        color: #969696;
+}
+.main .recommend-note a {
+    position: relative;
+    margin: 20px 2px 0 0;
+    width: 200px;
+    height: 160px;
+    display: inline-block;
+}
+.main .recommend-note a:after {
+      content: "";
+      position: absolute;
+      width: 200px;
+      height: 160px;
+      border-radius: 0 0 4px 4px;
+      -webkit-box-shadow: inset 0px -80px 50px -22px rgba(0, 0, 0, 0.6);
+              box-shadow: inset 0px -80px 50px -22px rgba(0, 0, 0, 0.6);
+      top: 0;
+      left: 0;
+      z-index: 1;
+}
+.main .recommend-note .name {
+    position: absolute;
+    bottom: 40px;
+    left: 10px;
+    right: 10px;
+    font-size: 17px;
+    font-weight: bold;
+    color: #ffffff;
+    z-index: 2;
+}
+.main .recommend-note .author {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    z-index: 2;
+}
+.main .recommend-note .avatar {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+}
+.main .recommend-note .avatar img {
+      border-radius: 50%;
+}
+.main .recommend-note .author-name {
+    font-size: 12px;
+    color: #ffffff;
+    display: inline-block;
+    vertical-align: -1px;
+}
+.main .show-more {
+    margin: 0 12px 12px 0;
+    font-size: 14px;
+    color: #A0A0A0;
+}
+</style><style type="text/css">
+@charset "UTF-8";
+/*
+ * 变量
+*/
+.pc-bind-phone-modal .modal-content, .pc-bind-phone-modal .modal-body {
+  overflow: visible;
+}
+.pc-bind-phone-modal .dropdown-menu {
+  max-height: 300px;
+  overflow: auto;
+}
+.pc-bind-phone-modal .dropdown-menu .tag {
+    background-color: #efefef;
+    color: #4A4A4A;
+    height: 28px;
+    line-height: 28px;
+    padding-left: 25px;
+    font-size: 12px;
+}
+.reader-night-mode .pc-bind-phone-modal .dropdown-menu .tag {
+  background-color: #2F2F2F;
+  color: #999999;
+}
+</style><style type="text/css">
+@charset "UTF-8";
+/*
+ * 变量
+*/
+.recommend-note {
+  margin-bottom: 20px;
+}
+.recommend-note .meta, .recommend-note .list {
+    width: 620px;
+    margin: 0 auto;
+}
+.recommend-note .meta .title {
+    padding-left: 8px;
+    border-left: 3px solid #EA6F5A;
+    line-height: 1;
+    font-size: 15px;
+}
+.recommend-note .meta .title .more {
+      float: right;
+      font-size: 14px;
+      color: #A0A0A0;
+}
+.recommend-note .list {
+    margin-top: 20px;
+}
+.recommend-note .list .note {
+      display: block;
+      margin-bottom: 25px;
+      padding: 0 0 25px 0;
+      border-bottom: 1px solid #DDDDDD;
+}
+.recommend-note .list .note.have-img {
+        min-height: 136px;
+}
+.recommend-note .list .note .cover {
+        float: right;
+        margin: -5px 0 0 15px;
+        width: 150px;
+        height: 120px;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        border-radius: 6px;
+}
+.recommend-note .list .note .title {
+        display: inherit;
+        margin-bottom: 4px;
+        font-size: 18px;
+        line-height: 27px;
+        font-weight: bold;
+        color: #333333;
+        overflow: hidden;
+        -o-text-overflow: ellipsis;
+           text-overflow: ellipsis;
+        white-space: nowrap;
+}
+.recommend-note .list .note .title:hover {
+          text-decoration: underline;
+}
+.recommend-note .list .note .title:visited {
+          color: #999999;
+}
+.recommend-note .list .note .description {
+        margin-bottom: 12px;
+        font-size: 13px;
+        line-height: 23px;
+        color: #333333;
+        overflow: hidden;
+        -o-text-overflow: ellipsis;
+           text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+}
+.recommend-note .list .note .author .avatar {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        margin-right: 3px;
+        border-radius: 50%;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        vertical-align: middle;
+}
+.recommend-note .list .note .author .name {
+        font-size: 13px;
+        color: #333333;
+        vertical-align: middle;
+}
+</style></head>
+
+  <body lang="zh-CN" class="reader-black-font">
+    <!-- 全局顶部导航栏 -->
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="width-limit">
+    <!-- 左上方 Logo -->
+    <a class="logo" href="https://www.jianshu.com/"><img src="./Android NDK开发：JNI基础篇 - 简书_files/nav-logo-4c7bbafe27adc892f3046e6978459bac.png" alt="Nav logo"></a>
+
+    <!-- 右上角 -->
+      <!-- 未登录显示登录/注册/写文章 -->
+      <a class="btn write-btn" target="_blank" href="https://www.jianshu.com/writer#/">
+        <i class="iconfont ic-write"></i>写文章
+</a>      <a class="btn sign-up" href="https://www.jianshu.com/sign_up">注册</a>
+      <a class="btn log-in" href="https://www.jianshu.com/sign_in">登录</a>
+
+    <!-- 如果用户登录，显示下拉菜单 -->
+
+    <div class="style-mode"><a class="style-mode-btn"><i class="iconfont ic-navigation-mode"></i></a> <div class="popover-modal" style="left: 0px; display: none;"><div class="meta"><i class="iconfont ic-navigation-night"></i><span>夜间模式</span></div> <div class="switch day-night-group"><a class="switch-btn">开</a> <a class="switch-btn active">关</a></div> <hr> <div class="switch font-family-group"><a class="switch-btn font-song">宋体</a> <a class="switch-btn font-hei active">黑体</a></div> <div class="switch"><a class="switch-btn active">简</a> <a class="switch-btn">繁</a></div></div></div>
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu" aria-expanded="false">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <div class="collapse navbar-collapse" id="menu">
+        <ul class="nav navbar-nav">
+            <li class="tab ">
+              <a href="https://www.jianshu.com/">
+                <span class="menu-text">首页</span><i class="iconfont ic-navigation-discover menu-icon"></i>
+</a>            </li>
+            <li class="tab ">
+              <a id="web-nav-app-download-btn" class="app-download-btn" href="https://www.jianshu.com/apps?utm_medium=desktop&amp;utm_source=navbar-apps"><span class="menu-text">下载App</span><i class="iconfont ic-navigation-download menu-icon"></i></a>
+            </li>
+          <li class="search">
+            <form target="_blank" action="https://www.jianshu.com/search" accept-charset="UTF-8" method="get"><input name="utf8" type="hidden" value="✓">
+              <input type="text" name="q" id="q" value="" autocomplete="off" placeholder="搜索" class="search-input">
+              <a class="search-btn" href="javascript:void(null)"><i class="iconfont ic-search"></i></a>
+</form>          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+
+    
+<div class="note">
+  <a target="_blank" href="https://www.jianshu.com/apps/download?utm_source=sbc" id="web-note-ad-fixed" style="left: 1311.5px; display: none;"><span class="close">×</span></a>
+  <div class="post">
+    <div class="article">
+        <h1 class="title">Android NDK开发：JNI基础篇</h1>
+
+        <!-- 作者区域 -->
+        <div class="author">
+          <a class="avatar" href="https://www.jianshu.com/u/134f7552aa7e">
+            <img src="./Android NDK开发：JNI基础篇 - 简书_files/2c2ecf02d9b5.jpg" alt="96">
+</a>          <div class="info">
+            <span class="name"><a href="https://www.jianshu.com/u/134f7552aa7e">cfanr</a></span>
+            <!-- 关注用户按钮 -->
+            <a class="btn btn-success follow"><i class="iconfont ic-follow"></i><span>关注</span></a>
+            <!-- 文章数据信息 -->
+            <div class="meta">
+              <!-- 如果文章更新时间大于发布时间，那么使用 tooltip 显示更新时间 -->
+                <span class="publish-time" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="最后编辑于 2018.01.17 17:15">2017.07.29 21:57*</span>
+              <span class="wordage">字数 3998</span>
+            <span class="views-count">阅读 8091</span><span class="comments-count">评论 0</span><span class="likes-count">喜欢 50</span><span class="rewards-count ">赞赏 1</span></div>
+          </div>
+          <!-- 如果是当前作者，加入编辑按钮 -->
+        </div>
+
+        <!-- 文章内容 -->
+        <div data-note-content="" class="show-content">
+          <div class="show-content-free">
+            <p>注：<a href="https://link.jianshu.com/?t=http%3A%2F%2Fcfanr.cn%2F2017%2F07%2F29%2FAndroid-NDK-dev-JNI-s-foundation%2F" target="_blank" rel="nofollow">原文地址</a></p>
+<h3>1. JNI 概念</h3>
+<h4>1.1 概念</h4>
+<p>JNI 全称 Java Native Interface，Java 本地化接口，可以通过 JNI 调用系统提供的 API。操作系统，无论是 Linux，Windows 还是 Mac OS，或者一些汇编语言写的底层硬件驱动都是 C/C++ 写的。<strong>Java和C/C++不同 ，它不会直接编译成平台机器码，而是编译成虚拟机可以运行的Java字节码的.class文件</strong>，通过JIT技术即时编译成本地机器码，所以有效率就比不上C/C++代码，JNI技术就解决了这一痛点，<strong>JNI 可以说是 C 语言和 Java 语言交流的适配器、中间件</strong>，下面我们来看看JNI调用示意图：来自<a href="https://www.jianshu.com/p/68bca86a84ce" target="_blank">JNI开发系列①JNI概念及开发流程 - 简书</a></p>
+<div class="image-package">
+<div class="image-container" style="max-width: 454px; max-height: 424px; background-color: transparent;">
+<div class="image-container-fill" style="padding-bottom: 93.39%;"></div>
+<div class="image-view" data-width="454" data-height="424"><img data-original-src="//upload-images.jianshu.io/upload_images/36817-ac4521739c753dff.png" data-original-width="454" data-original-height="424" data-original-format="image/png" data-original-filesize="23046" class="" src="./Android NDK开发：JNI基础篇 - 简书_files/36817-ac4521739c753dff.png" style="cursor: zoom-in;"></div>
+</div>
+<div class="image-caption">JNI 调用示意图</div>
+</div>
+<p>JNI技术通过JVM调用到各个平台的API，虽然JNI可以调用C/C++，但是JNI调用还是比C/C++编写的原生应用还是要慢一点，不过对高性能计算来说，这点算不得什么，享受它的便利，也要承担它的弊端。</p>
+<h4>1.2 JNI 与 NDK 区别</h4>
+<ul>
+<li>JNI：JNI是一套编程接口，用来实现Java代码与本地的C/C++代码进行交互；</li>
+<li>NDK: NDK是Google开发的一套开发和编译工具集，可以生成动态链接库，主要用于Android的JNI开发；</li>
+</ul>
+<h3>2. JNI 作用</h3>
+<ul>
+<li>
+<strong>扩展：</strong>JNI扩展了JVM能力，驱动开发，例如开发一个wifi驱动，可以将手机设置为无限路由；</li>
+<li>
+<strong>高效：</strong> 本地代码效率高，游戏渲染，音频视频处理等方面使用JNI调用本地代码，C语言可以灵活操作内存；</li>
+<li>
+<strong>复用：</strong> 在文件压缩算法 7zip开源代码库，机器视觉 OpenCV开放算法库等方面可以复用C平台上的代码，不必在开发一套完整的Java体系，避免重复发明轮子；</li>
+<li>
+<strong>特殊：</strong> 产品的核心技术一般也采用JNI开发，不易破解；</li>
+</ul>
+<p><strong>JNI在Android中作用：</strong><br>
+JNI可以调用本地代码库(即C/C++代码)，并通过 Dalvik 虚拟机与应用层和应用框架层进行交互，Android中JNI代码主要位于应用层和应用框架层；</p>
+<ul>
+<li>应用层: 该层是由JNI开发，主要使用标准JNI编程模型；</li>
+<li>应用框架层: 使用的是Android中自定义的一套JNI编程模型，该自定义的JNI编程模型弥补了标准JNI编程模型的不足；</li>
+</ul>
+<h4><strong>补充知识点：</strong></h4>
+<p><strong>Java语言执行流程：</strong></p>
+<ul>
+<li>编译字节码：Java编译器编译 .java源文件，获得.class 字节码文件；</li>
+<li>装载类库：使用类装载器装载平台上的Java类库，并进行字节码验证；</li>
+<li>Java虚拟机：将字节码加入到JVM中，Java解释器和即时编译器同时处理字节码文件，将处理后的结果放入运行时系统；</li>
+<li>调用JVM所在平台类库：JVM处理字节码后，转换成相应平台的操作，调用本平台底层类库进行相关处理；</li>
+</ul>
+<div class="image-package">
+<div class="image-container" style="max-width: 551px; max-height: 403px; background-color: transparent;">
+<div class="image-container-fill" style="padding-bottom: 73.14%;"></div>
+<div class="image-view" data-width="551" data-height="403"><img data-original-src="//upload-images.jianshu.io/upload_images/36817-fe672cea1fd5d248.png" data-original-width="551" data-original-height="403" data-original-format="image/png" data-original-filesize="92616" class="" src="./Android NDK开发：JNI基础篇 - 简书_files/36817-fe672cea1fd5d248.png" style="cursor: zoom-in;"></div>
+</div>
+<div class="image-caption">Java 语言执行流程</div>
+</div>
+<p><strong>Java一次编译到处执行</strong>: JVM在不同的操作系统都有实现，Java可以一次编译到处运行，字节码文件一旦编译好了，可以放在任何平台的虚拟机上运行；</p>
+<h3>3. 查看 jni.h 文件源码方法</h3>
+<blockquote>
+<p><strong>jni.h 头文件就是为了让 C/C++ 类型和 Java 原始类型相匹配的头文件定义。</strong></p>
+</blockquote>
+<p>可以通过点击 Android项目的含有<code>#include &lt;jni.h&gt;</code>的头文件或 C/C++ 文件跳转到 jni.h 头文件查看；<br>
+如果没有这样的文件的话，可以在 Android Studio 上新建一个类，随便写一个 native 方法，然后点击红色的方法，AS 会自动生成一个对应的 C 语言文件<code>jnitest.c</code>，就可以找到 jni.h 文件了</p>
+<div class="image-package">
+<div class="image-container" style="max-width: 700px; max-height: 662px; background-color: transparent;">
+<div class="image-container-fill" style="padding-bottom: 50.839999999999996%;"></div>
+<div class="image-view" data-width="1302" data-height="662"><img data-original-src="//upload-images.jianshu.io/upload_images/36817-9789e35e13963255.png" data-original-width="1302" data-original-height="662" data-original-format="image/png" data-original-filesize="119507" class="" src="./Android NDK开发：JNI基础篇 - 简书_files/36817-9789e35e13963255.png" style="cursor: zoom-in;"></div>
+</div>
+<div class="image-caption"></div>
+</div>
+<div class="image-package">
+<div class="image-container" style="max-width: 700px; max-height: 418px; background-color: transparent;">
+<div class="image-container-fill" style="padding-bottom: 27.939999999999998%;"></div>
+<div class="image-view" data-width="1496" data-height="418"><img data-original-src="//upload-images.jianshu.io/upload_images/36817-4fd3dc06518a6fd5.png" data-original-width="1496" data-original-height="418" data-original-format="image/png" data-original-filesize="66002" class="" src="./Android NDK开发：JNI基础篇 - 简书_files/36817-4fd3dc06518a6fd5.png" style="cursor: zoom-in;"></div>
+</div>
+<div class="image-caption"></div>
+</div>
+<p>或者，通过 javah 命令<code>javah cn.cfanr.testjni.JniTest</code>，就可以生成对应头文件<code>cn_cfanr_testjni_JniTest.h</code>：</p>
+<div class="image-package">
+<div class="image-container" style="max-width: 700px; max-height: 391px; background-color: transparent;">
+<div class="image-container-fill" style="padding-bottom: 55.879999999999995%;"></div>
+<div class="image-view" data-width="1428" data-height="798"><img data-original-src="//upload-images.jianshu.io/upload_images/36817-2ef379c4d930daf3.png" data-original-width="1428" data-original-height="798" data-original-format="image/png" data-original-filesize="160364" class="" src="./Android NDK开发：JNI基础篇 - 简书_files/36817-2ef379c4d930daf3.png" style="cursor: zoom-in;"></div>
+</div>
+<div class="image-caption">javah 生成的</div>
+</div>
+<h3>4. JNI 数据类型映射</h3>
+<p>由头文件代码可以看到，jni.h有很多类型预编译的定义，并且区分了 C 和 C++的不同环境。</p>
+<pre class="hljs cpp"><code class="cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">ifdef</span> HAVE_INTTYPES_H</span>
+<span class="hljs-meta"># <span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;inttypes.h&gt;      /* C99 */</span></span>
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">uint8_t</span>         jboolean;       <span class="hljs-comment">/* unsigned 8 bits */</span>
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">int8_t</span>          jbyte;          <span class="hljs-comment">/* signed 8 bits */</span>
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">uint16_t</span>        jchar;          <span class="hljs-comment">/* unsigned 16 bits */</span>
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">int16_t</span>         jshort;         <span class="hljs-comment">/* signed 16 bits */</span>
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">int32_t</span>         jint;           <span class="hljs-comment">/* signed 32 bits */</span>
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">int64_t</span>         jlong;          <span class="hljs-comment">/* signed 64 bits */</span>
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">float</span>           jfloat;         <span class="hljs-comment">/* 32-bit IEEE 754 */</span>
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">double</span>          jdouble;        <span class="hljs-comment">/* 64-bit IEEE 754 */</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">else</span></span>
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">char</span>   jboolean;       <span class="hljs-comment">/* unsigned 8 bits */</span>
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">signed</span> <span class="hljs-keyword">char</span>     jbyte;          <span class="hljs-comment">/* signed 8 bits */</span>
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">short</span>  jchar;          <span class="hljs-comment">/* unsigned 16 bits */</span>
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">short</span>           jshort;         <span class="hljs-comment">/* signed 16 bits */</span>
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">int</span>             jint;           <span class="hljs-comment">/* signed 32 bits */</span>
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span>       jlong;          <span class="hljs-comment">/* signed 64 bits */</span>
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">float</span>           jfloat;         <span class="hljs-comment">/* 32-bit IEEE 754 */</span>
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">double</span>          jdouble;        <span class="hljs-comment">/* 64-bit IEEE 754 */</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">endif</span></span>
+
+<span class="hljs-comment">/* "cardinal indices and sizes" */</span>
+<span class="hljs-keyword">typedef</span> jint            jsize;
+
+<span class="hljs-meta">#<span class="hljs-meta-keyword">ifdef</span> __cplusplus</span>
+<span class="hljs-comment">/*
+ * Reference types, in C++
+ */</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> _<span class="hljs-title">jobject</span> {</span>};
+<span class="hljs-class"><span class="hljs-keyword">class</span> _<span class="hljs-title">jclass</span> :</span> <span class="hljs-keyword">public</span> _jobject {};
+<span class="hljs-class"><span class="hljs-keyword">class</span> _<span class="hljs-title">jstring</span> :</span> <span class="hljs-keyword">public</span> _jobject {};
+<span class="hljs-class"><span class="hljs-keyword">class</span> _<span class="hljs-title">jarray</span> :</span> <span class="hljs-keyword">public</span> _jobject {};
+<span class="hljs-class"><span class="hljs-keyword">class</span> _<span class="hljs-title">jobjectArray</span> :</span> <span class="hljs-keyword">public</span> _jarray {};
+<span class="hljs-class"><span class="hljs-keyword">class</span> _<span class="hljs-title">jbooleanArray</span> :</span> <span class="hljs-keyword">public</span> _jarray {};
+<span class="hljs-comment">//……</span>
+
+<span class="hljs-keyword">typedef</span> _jobject*       jobject;
+<span class="hljs-keyword">typedef</span> _jclass*        jclass;
+<span class="hljs-keyword">typedef</span> _jstring*       jstring;
+<span class="hljs-keyword">typedef</span> _jarray*        jarray;
+<span class="hljs-keyword">typedef</span> _jobjectArray*  jobjectArray;
+<span class="hljs-keyword">typedef</span> _jbooleanArray* jbooleanArray;
+<span class="hljs-comment">//……</span>
+
+<span class="hljs-meta">#<span class="hljs-meta-keyword">else</span> <span class="hljs-comment">/* not __cplusplus */</span></span>
+
+<span class="hljs-comment">/*
+ * Reference types, in C.
+ */</span>
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">void</span>*           jobject;
+<span class="hljs-keyword">typedef</span> jobject         jclass;
+<span class="hljs-keyword">typedef</span> jobject         jstring;
+<span class="hljs-keyword">typedef</span> jobject         jarray;
+<span class="hljs-keyword">typedef</span> jarray          jobjectArray;
+<span class="hljs-keyword">typedef</span> jarray          jbooleanArray;
+<span class="hljs-comment">//……</span>
+
+<span class="hljs-meta">#<span class="hljs-meta-keyword">endif</span></span>
+</code></pre>
+<p>当是C++环境时，jobject, jclass, jstring, jarray 等都是继承自<code>_jobject</code>类，而在 C 语言环境是，则它的本质都是空类型指针<code>typedef void* jobject;</code></p>
+<h4>4.1 基本数据类型</h4>
+<p>下图是Java基本数据类型和本地类型的映射关系，这些<strong>基本数据类型都是可以直接在 Native 层直接使用的</strong>：<br>
+</p><div class="image-package">
+<div class="image-container" style="max-width: 700px; max-height: 414px; background-color: transparent;">
+<div class="image-container-fill" style="padding-bottom: 55.13%;"></div>
+<div class="image-view" data-width="751" data-height="414"><img data-original-src="//upload-images.jianshu.io/upload_images/36817-44a378d473a104fb.png" data-original-width="751" data-original-height="414" data-original-format="image/png" data-original-filesize="41602" class="" src="./Android NDK开发：JNI基础篇 - 简书_files/36817-44a378d473a104fb.png" style="cursor: zoom-in;"></div>
+</div>
+<div class="image-caption">基本数据类型映射</div>
+</div><p></p>
+<h4>4.2 引用数据类型</h4>
+<p>另外，还有引用数据类型和本地类型的映射关系：</p>
+<div class="image-package">
+<div class="image-container" style="max-width: 700px; max-height: 486px; background-color: transparent;">
+<div class="image-container-fill" style="padding-bottom: 64.8%;"></div>
+<div class="image-view" data-width="750" data-height="486"><img data-original-src="//upload-images.jianshu.io/upload_images/36817-a70108f5d090bc8d.png" data-original-width="750" data-original-height="486" data-original-format="image/png" data-original-filesize="47483" class="" src="./Android NDK开发：JNI基础篇 - 简书_files/36817-a70108f5d090bc8d.png" style="cursor: zoom-in;"></div>
+</div>
+<div class="image-caption">引用数据类型映射</div>
+</div>
+<p>需要注意的是，</p>
+<ul>
+<li>1）引用类型不能直接在 Native 层使用，需要根据 JNI 函数进行类型的转化后，才能使用;</li>
+<li>2）多维数组（含二维数组）都是引用类型，需要使用 jobjectArray 类型存取其值；</li>
+</ul>
+<p>例如，二维整型数组就是指向一位数组的数组，其声明使用方式如下：</p>
+<pre class="hljs php"><code class="php">      <span class="hljs-comment">//获得一维数组的类引用，即jintArray类型  </span>
+    jclass intArrayClass = env-&gt;FindClass(<span class="hljs-string">"[I"</span>);   
+    <span class="hljs-comment">//构造一个指向jintArray类一维数组的对象数组，该对象数组初始大小为length，类型为 jsize</span>
+    jobjectArray obejctIntArray  =  env-&gt;NewObjectArray(length ,intArrayClass , <span class="hljs-keyword">NULL</span>); 
+</code></pre>
+<h4>4.3 方法和变量 ID</h4>
+<p>同样不能直接在 Native 层使用。当 Native 层需要调用 Java 的某个方法时，需要通过 JNI 函数获取它的 ID，根据 ID 调用 JNI 函数获取该方法；变量的获取也是类似。ID 的结构体如下：</p>
+<pre class="hljs cpp"><code class="cpp"><span class="hljs-class"><span class="hljs-keyword">struct</span> _<span class="hljs-title">jfieldID</span>;</span>                       <span class="hljs-comment">/* opaque structure */</span>
+<span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> _<span class="hljs-title">jfieldID</span>* <span class="hljs-title">jfieldID</span>;</span>     <span class="hljs-comment">/* field IDs */</span>
+
+<span class="hljs-class"><span class="hljs-keyword">struct</span> _<span class="hljs-title">jmethodID</span>;</span>                      <span class="hljs-comment">/* opaque structure */</span>
+<span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> _<span class="hljs-title">jmethodID</span>* <span class="hljs-title">jmethodID</span>;</span>   <span class="hljs-comment">/* method IDs */</span>
+</code></pre>
+<h3>5. JNI 描述符</h3>
+<h4>5.1域描述符</h4>
+<p><strong>1）基本类型描述符</strong></p>
+<p>下面是基本的数据类型的描述符，除了 boolean 和 long 类型分别是 Z 和 J 外，其他的描述符对应的都是Java类型名的大写首字母。另外，void 的描述符为 V</p>
+<div class="image-package">
+<div class="image-container" style="max-width: 700px; max-height: 399px; background-color: transparent;">
+<div class="image-container-fill" style="padding-bottom: 57.03%;"></div>
+<div class="image-view" data-width="1294" data-height="738"><img data-original-src="//upload-images.jianshu.io/upload_images/36817-0460150cbcb3a6e8.png" data-original-width="1294" data-original-height="738" data-original-format="image/png" data-original-filesize="54248" class="" src="./Android NDK开发：JNI基础篇 - 简书_files/36817-0460150cbcb3a6e8.png" style="cursor: zoom-in;"></div>
+</div>
+<div class="image-caption">基本类型描述符</div>
+</div>
+<p><strong>2）引用类型描述符</strong></p>
+<p>一般引用类型描述符的规则如下，<strong>注意不要丢掉“；”</strong></p>
+<pre class="hljs undefined"><code>L + 类描述符 + ;
+</code></pre>
+<p>如，String 类型的域描述符为：</p>
+<pre class="hljs javascript"><code class="javascript">Ljava/lang/<span class="hljs-built_in">String</span>;
+</code></pre>
+<p>数组的域描述符特殊一点，如下，<strong>其中有多少级数组就有多少个“[”，数组的类型为类时，则有分号，为基本类型时没有分号</strong></p>
+<pre class="hljs undefined"><code>[ + 其类型的域描述符
+</code></pre>
+<p>例如：</p>
+<pre class="hljs cpp"><code class="cpp"><span class="hljs-keyword">int</span>[]    描述符为 [I
+<span class="hljs-keyword">double</span>[] 描述符为 [D
+String[] 描述符为 [Ljava/lang/String;
+Object[] 描述符为 [Ljava/lang/Object;
+<span class="hljs-keyword">int</span>[][]  描述符为 [[I
+<span class="hljs-keyword">double</span>[][] 描述符为 [[D
+</code></pre>
+<p>对应在 jni.h  获取 Java 的字段的 native 函数如下，name为 Java 的字段名字，sig 为域描述符</p>
+<pre class="hljs cpp"><code class="cpp"><span class="hljs-comment">//C</span>
+jfieldID    (*GetFieldID)(JNIEnv*, jclass, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span>*, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span>*);
+jobject     (*GetObjectField)(JNIEnv*, jobject, jfieldID);
+<span class="hljs-comment">//C++</span>
+<span class="hljs-function">jfieldID <span class="hljs-title">GetFieldID</span><span class="hljs-params">(jclass clazz, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span>* name, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span>* sig)</span>
+    </span>{ <span class="hljs-keyword">return</span> functions-&gt;GetFieldID(<span class="hljs-keyword">this</span>, clazz, name, sig); }
+<span class="hljs-function">jobject <span class="hljs-title">GetObjectField</span><span class="hljs-params">(jobject obj, jfieldID fieldID)</span>
+    </span>{ <span class="hljs-keyword">return</span> functions-&gt;GetObjectField(<span class="hljs-keyword">this</span>, obj, fieldID); }
+</code></pre>
+<p>具体使用，后面会讲到</p>
+<h4>5.2 类描述符</h4>
+<p>类描述符是类的完整名称：包名+类名，java 中包名用 . 分割，jni 中改为用 / 分割<br>
+如，Java 中 java.lang.String 类的描述符为 java/lang/String<br>
+native 层获取 Java 的类对象，需要通过 FindClass() 函数获取， jni.h 的函数定义如下：</p>
+<pre class="hljs cpp"><code class="cpp"><span class="hljs-comment">//C</span>
+jclass  (*FindClass)(JNIEnv*, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span>*);
+<span class="hljs-comment">//C++</span>
+<span class="hljs-function">jclass <span class="hljs-title">FindClass</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span>* name)</span>
+    </span>{ <span class="hljs-keyword">return</span> functions-&gt;FindClass(<span class="hljs-keyword">this</span>, name); }
+</code></pre>
+<p>字符串参数就是类的引用类型描述符，如 Java 对象 cn.cfanr.jni.JniTest，对应字符串为Lcn/cfanr/jni/JniTest; 如下：</p>
+<pre class="hljs php"><code class="php">jclass jclazz = env-&gt;FindClass(<span class="hljs-string">"Lcn/cfanr/jni/JniTest;"</span>);
+</code></pre>
+<p>详细用法的例子，后面会讲到。</p>
+<h4>5.3 方法描述符</h4>
+<p>方法描述符需要将所有参数类型的域描述符按照声明顺序放入括号，然后再加上返回值类型的域描述符，其中<strong>没有参数时，不需要括号，</strong>如下规则：</p>
+<pre class="hljs undefined"><code>(参数……)返回类型
+</code></pre>
+<p>例如：</p>
+<pre class="hljs java"><code class="java">  Java 层方法   ——&gt;  JNI 函数签名
+<span class="hljs-function">String <span class="hljs-title">getString</span><span class="hljs-params">()</span>  ——&gt;  Ljava/lang/String</span>;
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">sum</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a, <span class="hljs-keyword">int</span> b)</span>  ——&gt;  <span class="hljs-params">(II)</span>I
+<span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> ——&gt; <span class="hljs-params">([Ljava/lang/String;)</span>V
+</span></code></pre>
+<p>另外，对应在 jni.h 获取 Java 方法的 native 函数如下，其中 jclass 是获取到的类对象，name 是 Java 对应的方法名字，sig 就是上面说的方法描述符</p>
+<pre class="hljs cpp"><code class="cpp"><span class="hljs-comment">//C</span>
+jmethodID   (*GetMethodID)(JNIEnv*, jclass, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span>*, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span>*);
+<span class="hljs-comment">//C++</span>
+<span class="hljs-function">jmethodID <span class="hljs-title">GetMethodID</span><span class="hljs-params">(jclass clazz, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span>* name, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span>* sig)</span>
+    </span>{ <span class="hljs-keyword">return</span> functions-&gt;GetMethodID(<span class="hljs-keyword">this</span>, clazz, name, sig); }
+</code></pre>
+<p>不过在实际编程中，<strong>如果使用 javah 工具来生成对应的 native 代码，就不需要手动编写对应的类型转换了。</strong></p>
+<h3>6. JNIEnv 分析</h3>
+<p>JNIEnv 是 jni.h  文件最重要的部分，它的<strong>本质是指向函数表指针的指针（JavaVM也是）</strong>，函数表里面定义了很多 JNI 函数，同时它也是区分 C 和 C++环境的（由上面介绍描述符时也可以看到），在 C 语言环境中，JNIEnv 是<code>strut JNINativeInterface*</code>的指针别名。</p>
+<pre class="hljs cpp"><code class="cpp"><span class="hljs-class"><span class="hljs-keyword">struct</span> _<span class="hljs-title">JNIEnv</span>;</span>
+<span class="hljs-class"><span class="hljs-keyword">struct</span> _<span class="hljs-title">JavaVM</span>;</span>
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">const</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">JNINativeInterface</span>* <span class="hljs-title">C_JNIEnv</span>;</span>
+
+<span class="hljs-meta">#<span class="hljs-meta-keyword">if</span> defined(__cplusplus)  </span>
+<span class="hljs-keyword">typedef</span> _JNIEnv JNIEnv;   <span class="hljs-comment">//C++中的 JNIEnv 类型</span>
+<span class="hljs-keyword">typedef</span> _JavaVM JavaVM;
+<span class="hljs-meta">#<span class="hljs-meta-keyword">else</span></span>
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">const</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">JNINativeInterface</span>* <span class="hljs-title">JNIEnv</span>;</span>  <span class="hljs-comment">//C语言的 JNIEnv 类型</span>
+<span class="hljs-keyword">typedef</span> <span class="hljs-keyword">const</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">JNIInvokeInterface</span>* <span class="hljs-title">JavaVM</span>;</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">endif</span></span>
+</code></pre>
+<h4>6.1 JNIEnv 特点</h4>
+<ul>
+<li>JNIEnv 是一个指针，指向一组 JNI 函数，通过这些函数可以实现 Java 层和 JNI 层的交互，就是说<strong>通过 JNIEnv 调用 JNI 函数可以访问 Java 虚拟机，操作 Java 对象；</strong>
+</li>
+<li>
+<strong>所有本地函数都会接收 JNIEnv 作为第一个参数；</strong>（不过 C++ 的JNI 函数已经对 JNIEnv 参数进行了封装，不用写在函数参数上）</li>
+<li>用作线程局部存储，不能在线程间共享一个 JNIEnv 变量，也就是说 <strong>JNIEnv 只在创建它的线程有效，不能跨线程传递；相同的 Java 线程调用本地方法，所使用的 JNIEnv 是相同的，一个 native 方法不能被不同的 Java 线程调用；</strong>
+</li>
+</ul>
+<h4>6.2 JavaEnv 和 JavaVM 的关系</h4>
+<p><a href="https://link.jianshu.com/?t=http%3A%2F%2Fblog.csdn.net%2Fdtryl%2Farticle%2Fdetails%2F50682599" target="_blank" rel="nofollow">JNIEnv和Dalvik的JavaVM的关系-CSDN</a></p>
+<ul>
+<li>1）<strong>每个进程只有一个 JavaVM</strong>（理论上一个进程可以拥有多个 JavaVM 对象，但 Android 只允许一个），<strong>每个线程都会有一个 JNIEnv，大部分 JNIAPI 通过 JNIEnv 调用；也就是说，JNI 全局只有一个 JavaVM，而可能有多个 JNIEnv；</strong>
+</li>
+<li>2）一个 JNIEnv 内部包含一个 Pointer，Pointer 指向 Dalvik 的 JavaVM 对象的 Function Table，JNIEnv 内部的函数执行环境来源于 Dalvik 虚拟机；</li>
+<li>3）Android 中每当一个Java 线程第一次要调用本地 C/C++  代码时，Dalvik 虚拟机实例会为该 Java 线程产生一个 JNIEnv 指针；</li>
+<li>4）Java 每条线程在和 C/C++  互相调用时，JNIEnv 是互相独立，互不干扰的，这样就提升了并发执行时的安全性；</li>
+<li>5）当本地的 C/C++ 代码想要获得当前线程所想要使用的 JNIEnv 时，可以使用 Dalvik VM 对象的 JavaVM* jvm-&gt;GetEnv()方法，该方法会返回当前线程所在的 JNIEnv*；</li>
+<li>6）Java 的 dex 字节码和 C/C++ 的 .so  同时运行 Dalvik VM 之内，共同使用一个进程空间；</li>
+</ul>
+<h4>6.3 C 语言的 JNIEnv</h4>
+<p>由上面代码可知，C 语言的JNIEnv 就是<code>const struct JNINativeInterface*</code>，而 <code>JNIEnv* env</code>就等价于<code>JNINativeInterface** env</code>，env 实际是一个二级指针，所以想要得到 JNINativeInterface 结构体中定义的函数指针，就需要先获取 JNINativeInterface 的一级指针对象*env，然后才能通过一级指针对象调用 JNI 函数，例如：<br>
+<code>(*env)-&gt;NewStringUTF(env, "hello")</code></p>
+<pre class="hljs cpp"><code class="cpp"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">JNINativeInterface</span> {</span>
+    <span class="hljs-keyword">void</span>*       reserved0;
+    <span class="hljs-keyword">void</span>*       reserved1;
+    <span class="hljs-keyword">void</span>*       reserved2;
+    <span class="hljs-keyword">void</span>*       reserved3;
+
+    jint        (*GetVersion)(JNIEnv *);
+    jclass      (*DefineClass)(JNIEnv*, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span>*, jobject, <span class="hljs-keyword">const</span> jbyte*, jsize);
+    jclass      (*FindClass)(JNIEnv*, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span>*);
+    jmethodID   (*FromReflectedMethod)(JNIEnv*, jobject);
+    jfieldID    (*FromReflectedField)(JNIEnv*, jobject);
+    <span class="hljs-comment">/* spec doesn't show jboolean parameter */</span>
+    jobject     (*ToReflectedMethod)(JNIEnv*, jclass, jmethodID, jboolean);
+    jclass      (*GetSuperclass)(JNIEnv*, jclass);
+    jboolean    (*IsAssignableFrom)(JNIEnv*, jclass, jclass);
+    <span class="hljs-comment">/* spec doesn't show jboolean parameter */</span>
+    jobject     (*ToReflectedField)(JNIEnv*, jclass, jfieldID, jboolean);
+      <span class="hljs-comment">//……定义了一系列关于 Java 操作的函数</span>
+}
+</code></pre>
+<h4>6.4 C++的 JNIEnv</h4>
+<p>由<code>typedef _JNIEnv JNIEnv;</code>可知，C++的 JNIEnv 是 _JNIEnv 结构体，而 _JNIEnv 结构体定义了 JNINativeInterface 的结构体指针，内部定义的函数实际上是调用 JNINativeInterface 的函数，所以C++的 env 是一级指针，调用时不需要加 env 作为函数的参数，例如：<code>env-&gt;NewStringUTF(env, "hello")</code></p>
+<pre class="hljs cpp"><code class="cpp"><span class="hljs-class"><span class="hljs-keyword">struct</span> _<span class="hljs-title">JNIEnv</span> {</span>
+    <span class="hljs-comment">/* do not rename this; it does not seem to be entirely opaque */</span>
+    <span class="hljs-keyword">const</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">JNINativeInterface</span>* <span class="hljs-title">functions</span>;</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">if</span> defined(__cplusplus)</span>
+    <span class="hljs-function">jint <span class="hljs-title">GetVersion</span><span class="hljs-params">()</span>
+    </span>{ <span class="hljs-keyword">return</span> functions-&gt;GetVersion(<span class="hljs-keyword">this</span>); }
+
+    <span class="hljs-function">jclass <span class="hljs-title">DefineClass</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *name, jobject loader, <span class="hljs-keyword">const</span> jbyte* buf, jsize bufLen)</span>
+    </span>{ <span class="hljs-keyword">return</span> functions-&gt;DefineClass(<span class="hljs-keyword">this</span>, name, loader, buf, bufLen); }
+
+    <span class="hljs-function">jclass <span class="hljs-title">FindClass</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span>* name)</span>
+    </span>{ <span class="hljs-keyword">return</span> functions-&gt;FindClass(<span class="hljs-keyword">this</span>, name); }
+
+    <span class="hljs-function">jmethodID <span class="hljs-title">FromReflectedMethod</span><span class="hljs-params">(jobject method)</span>
+    </span>{ <span class="hljs-keyword">return</span> functions-&gt;FromReflectedMethod(<span class="hljs-keyword">this</span>, method); }
+
+    <span class="hljs-function">jfieldID <span class="hljs-title">FromReflectedField</span><span class="hljs-params">(jobject field)</span>
+    </span>{ <span class="hljs-keyword">return</span> functions-&gt;FromReflectedField(<span class="hljs-keyword">this</span>, field); }
+
+    <span class="hljs-function">jobject <span class="hljs-title">ToReflectedMethod</span><span class="hljs-params">(jclass cls, jmethodID methodID, jboolean isStatic)</span>
+    </span>{ <span class="hljs-keyword">return</span> functions-&gt;ToReflectedMethod(<span class="hljs-keyword">this</span>, cls, methodID, isStatic); }
+
+    <span class="hljs-function">jclass <span class="hljs-title">GetSuperclass</span><span class="hljs-params">(jclass clazz)</span>
+    </span>{ <span class="hljs-keyword">return</span> functions-&gt;GetSuperclass(<span class="hljs-keyword">this</span>, clazz); }
+    <span class="hljs-comment">//……</span>
+}
+</code></pre>
+<h3>7. JNI 的两种注册方式</h3>
+<p>Java 的 native 方法是如何链接 C/C++中的函数的呢？可以通过静态和动态的方式注册JNI。</p>
+<h4>7.1静态注册</h4>
+<p><strong>原理：根据函数名建立 Java 方法和 JNI 函数的一一对应关系。</strong>流程如下：</p>
+<ul>
+<li>先编写 Java 的 native 方法；</li>
+<li>然后用 javah 工具生成对应的头文件，执行命令 <code>javah packagename.classname</code>可以生成由包名加类名命名的 jni 层头文件，或执行命名<code>javah -o custom.h packagename.classname</code>，其中 custom.h 为自定义的文件名；</li>
+<li>实现 JNI 里面的函数，再在Java中通过System.loadLibrary加载 so 库即可；</li>
+</ul>
+<p>静态注册的方式有两个重要的关键词 JNIEXPORT 和 JNICALL，这两个关键词是宏定义，主要是注明该函数式 JNI 函数，当虚拟机加载 so 库时，如果发现函数含有这两个宏定义时，就会链接到对应的 Java 层的 native 方法。</p>
+<p>由前面<code>3. 查看 jni.h 文件源码方法</code>生成头文件的方法，重新创建一个<code>cn.cfanr.test_jni.Jni_Test.java</code>的类</p>
+<pre class="hljs java"><code class="java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Jni_Test</span> </span>{
+    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">native</span> <span class="hljs-keyword">int</span> <span class="hljs-title">swap</span><span class="hljs-params">()</span></span>;
+
+    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">native</span> <span class="hljs-keyword">void</span> <span class="hljs-title">swap</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a, <span class="hljs-keyword">int</span> b)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">native</span> <span class="hljs-keyword">void</span> <span class="hljs-title">swap</span><span class="hljs-params">(String a, String b)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">native</span> <span class="hljs-keyword">void</span> <span class="hljs-title">swap</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] arr, <span class="hljs-keyword">int</span> a, <span class="hljs-keyword">int</span> b)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">native</span> <span class="hljs-keyword">void</span> <span class="hljs-title">swap_0</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a, <span class="hljs-keyword">int</span> b)</span></span>;
+}
+</code></pre>
+<p>用 javah 工具生成以下头文件：</p>
+<pre class="hljs cpp"><code class="cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;jni.h&gt;</span></span>
+<span class="hljs-comment">/* Header for class cn_cfanr_test_jni_Jni_Test */</span>
+
+<span class="hljs-meta">#<span class="hljs-meta-keyword">ifndef</span> _Included_cn_cfanr_test_jni_Jni_Test</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> _Included_cn_cfanr_test_jni_Jni_Test</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">ifdef</span> __cplusplus</span>
+<span class="hljs-keyword">extern</span> <span class="hljs-string">"C"</span> {
+<span class="hljs-meta">#<span class="hljs-meta-keyword">endif</span></span>
+<span class="hljs-comment">/*
+ * Class:     cn_cfanr_test_jni_Jni_Test
+ * Method:    swap
+ * Signature: ()I
+ */</span>
+<span class="hljs-function">JNIEXPORT jint JNICALL <span class="hljs-title">Java_cn_cfanr_test_1jni_Jni_1Test_swap__</span>
+  <span class="hljs-params">(JNIEnv *, jclass)</span></span>;    <span class="hljs-comment">// 凡是重载的方法，方法后面都会多一个下划线</span>
+
+<span class="hljs-comment">/*
+ * Class:     cn_cfanr_test_jni_Jni_Test
+ * Method:    swap
+ * Signature: (II)V
+ */</span>
+<span class="hljs-function">JNIEXPORT <span class="hljs-keyword">void</span> JNICALL <span class="hljs-title">Java_cn_cfanr_test_1jni_Jni_1Test_swap__II</span>
+  <span class="hljs-params">(JNIEnv *, jclass, jint, jint)</span></span>;
+
+<span class="hljs-comment">/*
+ * Class:     cn_cfanr_test_jni_Jni_Test
+ * Method:    swap
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)V
+ */</span>
+<span class="hljs-function">JNIEXPORT <span class="hljs-keyword">void</span> JNICALL <span class="hljs-title">Java_cn_cfanr_test_1jni_Jni_1Test_swap__Ljava_lang_String_2Ljava_lang_String_2</span>
+  <span class="hljs-params">(JNIEnv *, jclass, jstring, jstring)</span></span>;
+
+<span class="hljs-comment">/*
+ * Class:     cn_cfanr_test_jni_Jni_Test
+ * Method:    swap
+ * Signature: ([III)V
+ */</span>
+<span class="hljs-function">JNIEXPORT <span class="hljs-keyword">void</span> JNICALL <span class="hljs-title">Java_cn_cfanr_test_1jni_Jni_1Test_swap___3III</span>
+  <span class="hljs-params">(JNIEnv *, jobject, jintArray, jint, jint)</span></span>;  <span class="hljs-comment">// 非 static 的为 jobject</span>
+
+<span class="hljs-comment">/*
+ * Class:     cn_cfanr_test_jni_Jni_Test
+ * Method:    swap_0
+ * Signature: (II)V
+ */</span>
+<span class="hljs-function">JNIEXPORT <span class="hljs-keyword">void</span> JNICALL <span class="hljs-title">Java_cn_cfanr_test_1jni_Jni_1Test_swap_10</span>   
+  <span class="hljs-params">(JNIEnv *, jclass, jint, jint)</span></span>;   <span class="hljs-comment">// 不知道为什么后面没有 II</span>
+
+<span class="hljs-meta">#<span class="hljs-meta-keyword">ifdef</span> __cplusplus</span>
+}
+<span class="hljs-meta">#<span class="hljs-meta-keyword">endif</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">endif</span></span>
+
+</code></pre>
+<p>可以看出 JNI 的调用函数的定义是按照一定规则命名的：<br>
+<code>JNIEXPORT 返回值 JNICALL Java_全路径类名_方法名_参数签名(JNIEnv* , jclass, 其它参数);</code><br>
+其中 Java_ 是为了标识该函数来源于 Java。<strong>经检验（不一定正确），如果是重载的方法，则有“参数签名”，否则没有；另外如果使用的是 C++，在函数前面加上 extern “C”（表示按照 C 的方式编译），函数命名后面就不需要加上“参数签名”。</strong></p>
+<p><strong>另外还需要注意几点特殊规则：</strong>（参考：<a href="https://link.jianshu.com/?t=http%3A%2F%2Flinlinjava.org%2F2015%2F04%2F01%2Flearning-jni.html" target="_blank" rel="nofollow">官方JNI规范翻译 | linlinjava的博客</a> <code>2.2.1 本地方法名解析</code>）</p>
+<ul>
+<li><strong>1. 包名或类名或方法名中含下划线 _ 要用 _1 连接；</strong></li>
+<li><strong>2. 重载的本地方法命名要用双下划线 __ 连接；</strong></li>
+<li>
+<strong>3. 参数签名的斜杠 “/” 改为下划线 “_” 连接，分号 “;” 改为 “_2” 连接，左方括号 “[” 改为 “_3” 连接；</strong><br>
+另外，对于 Java 的 native 方法，static 和非 static 方法的区别在于第二个参数，static 的为 jclass，非 static 的 为 jobject；JNI 函数中是没有修饰符的。</li>
+</ul>
+<p>优点：<br>
+实现比较简单，可以通过 javah 工具将 Java代码的 native 方法直接转化为对应的native层代码的函数；<br>
+缺点：</p>
+<ul>
+<li>javah 生成的 native 层函数名特别长，可读性很差；</li>
+<li>后期修改文件名、类名或函数名时，头文件的函数将失效，需要重新生成或手动改，比较麻烦；</li>
+<li>程序运行效率低，首次调用 native 函数时，需要根据函数名在 JNI 层搜索对应的本地函数，建立对应关系，有点耗时；</li>
+</ul>
+<h4>7.2 动态注册</h4>
+<p><strong>原理：直接告诉 native 方法其在JNI 中对应函数的指针</strong>。通过使用 JNINativeMethod 结构来保存 Java native 方法和 JNI 函数关联关系，步骤：</p>
+<ul>
+<li>先编写 Java 的 native 方法；</li>
+<li>编写 JNI 函数的实现（函数名可以随便命名）；</li>
+<li>利用结构体 JNINativeMethod 保存Java native方法和 JNI函数的对应关系；</li>
+<li>利用<code>registerNatives(JNIEnv* env)</code>注册类的所有本地方法；</li>
+<li>在 JNI_OnLoad 方法中调用注册方法；</li>
+<li>在Java中通过System.loadLibrary加载完JNI动态库之后，会调用JNI_OnLoad函数，完成动态注册；</li>
+</ul>
+<pre class="hljs cpp"><code class="cpp"><span class="hljs-comment">//JNINativeMethod结构体</span>
+<span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> {</span>
+    <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span>* name;       <span class="hljs-comment">//Java中native方法的名字</span>
+    <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span>* signature;  <span class="hljs-comment">//Java中native方法的描述符</span>
+    <span class="hljs-keyword">void</span>*       fnPtr;      <span class="hljs-comment">//对应JNI函数的指针</span>
+} JNINativeMethod;
+
+<span class="hljs-comment">/**
+ * @param clazz java类名，通过 FindClass 获取
+ * @param methods JNINativeMethod 结构体指针
+ * @param nMethods 方法个数
+ */</span>
+<span class="hljs-function">jint <span class="hljs-title">RegisterNatives</span><span class="hljs-params">(jclass clazz, <span class="hljs-keyword">const</span> JNINativeMethod* methods, jint nMethods)</span>
+
+<span class="hljs-comment">//JNI_OnLoad </span>
+JNIEXPORT jint JNICALL <span class="hljs-title">JNI_OnLoad</span><span class="hljs-params">(JavaVM* vm, <span class="hljs-keyword">void</span>* reserved)</span></span>;
+
+</code></pre>
+<p>由于篇幅原因，具体的静态注册、动态注册、数据类型映射和描述符的练习放到下一篇文章：<a href="https://www.jianshu.com/p/464cd879eaba" target="_blank">Android NDK开发：JNI实战篇</a>。</p>
+<p><em>注：文章通过阅读 JNI 的文档和参照网上的博客总结出来的，如有错误，还望指出！</em></p>
+<p>参考：<br>
+<a href="https://www.jianshu.com/p/68bca86a84ce" target="_blank">JNI开发系列①JNI概念及开发流程 - 简书</a><br>
+<a href="https://link.jianshu.com/?t=http%3A%2F%2Fblog.csdn.net%2Fqinjuning%2Farticle%2Fdetails%2F7599796" target="_blank" rel="nofollow">JNI 数据类型映射、域描述符说明 - qinjuning  - CSDN博客</a><br>
+<a href="https://link.jianshu.com/?t=http%3A%2F%2Fblog.csdn.net%2Fshulianghan%2Farticle%2Fdetails%2F38012515" target="_blank" rel="nofollow">Android JNI 之 JNIEnv 解析 - 韩曙亮 - CSDN博客</a><br>
+<a href="https://link.jianshu.com/?t=http%3A%2F%2Fblog.csdn.net%2Fshulianghan%2Farticle%2Fdetails%2F18964835" target="_blank" rel="nofollow">Android 开发 之 JNI入门 - NDK从入门到精通 -韩曙亮 - CSDN博客</a><br>
+<a href="https://link.jianshu.com/?t=https%3A%2F%2Fjuejin.im%2Fentry%2F5885b019128fe1006c3f0149" target="_blank" rel="nofollow">JNI 两种注册过程实战  - Android - 掘金</a><br>
+<a href="https://link.jianshu.com/?t=http%3A%2F%2Fzhixinliu.com%2F2015%2F07%2F01%2F2015-07-01-jni-register%2F" target="_blank" rel="nofollow">Andoid NDK编程 注册native函数 // Coding Life</a></p>
+<p>扩展阅读：<br>
+<a href="https://link.jianshu.com/?t=http%3A%2F%2Fhukai.me%2Fandroid-training-course-in-chinese%2Fperformance%2Fperf-jni%2Findex.html" target="_blank" rel="nofollow">JNI 使用指南-胡凯</a><br>
+<a href="https://link.jianshu.com/?t=http%3A%2F%2Fblog.csdn.net%2Fqinjuning%2Farticle%2Fdetails%2F7595104" target="_blank" rel="nofollow">JNI 常用函数大全 qinjuning- CSDN博客</a><br>
+<a href="https://link.jianshu.com/?t=http%3A%2F%2Fgityuan.com%2F2016%2F05%2F28%2Fandroid-jni%2F" target="_blank" rel="nofollow">Android JNI原理分析 - Gityuan博客 | 袁辉辉博客</a><br>
+<a href="https://link.jianshu.com/?t=http%3A%2F%2Fdocs.oracle.com%2Fjavase%2F8%2Fdocs%2Ftechnotes%2Fguides%2Fjni%2Fspec%2FjniTOC.html" target="_blank" rel="nofollow">JNI API 文档 (Java8): Java Native Interface Specification</a><br>
+<a href="https://link.jianshu.com/?t=http%3A%2F%2Flinlinjava.org%2F2015%2F04%2F01%2Flearning-jni.html" target="_blank" rel="nofollow">官方JNI API 规范翻译 | linlinjava的博客</a></p>
+
+          </div>
+        </div>
+    </div>
+
+    <!-- 如果是付费文章，未购买，则显示购买按钮 -->
+
+    <!-- 连载目录项 -->
+
+    <!-- 如果是付费文章 -->
+      <!-- 如果是付费连载，已购买，且作者允许赞赏，则显示付费信息和赞赏 -->
+        <div id="free-reward-panel" class="support-author"><p>小礼物走一走，来简书关注我</p> <div class="btn btn-pay">赞赏支持</div> <div class="supporter"><ul class="support-list"><li><a target="_blank" href="javascript:void(0)" class="avatar"><img src="./Android NDK开发：JNI基础篇 - 简书_files/wechat-771371d5741b0c32cd805caeb48ad6c0.png"></a></li></ul> <!----></div> <!----> <!----></div>
+
+      <div class="show-foot">
+        <a class="notebook" href="https://www.jianshu.com/nb/441594">
+          <i class="iconfont ic-search-notebook"></i>
+          <span>Tech Learn</span>
+</a>        <div class="copyright" data-toggle="tooltip" data-html="true" data-original-title="转载请联系作者获得授权，并标注“简书作者”。">
+          © 著作权归作者所有
+        </div>
+        <div class="modal-wrap" data-report-note="">
+          <a id="report-modal">举报文章</a>
+        </div>
+      </div>
+
+      <!-- 文章底部作者信息 -->
+        <div class="follow-detail">
+          <div class="info">
+            <a class="avatar" href="https://www.jianshu.com/u/134f7552aa7e">
+              <img src="./Android NDK开发：JNI基础篇 - 简书_files/2c2ecf02d9b5.jpg" alt="96">
+</a>            <a class="btn btn-success follow"><i class="iconfont ic-follow"></i><span>关注</span></a>
+            <a class="title" href="https://www.jianshu.com/u/134f7552aa7e">cfanr</a>
+              <i class="iconfont ic-man"></i>
+          <p>写了 132898 字，被 437 人关注，获得了 2256 个喜欢</p></div>
+            <div class="signature">对贡献有激情，对回报有信心！
+-------------------------
+个人博客: http://cfanr.cn
+GitHub: https://github.com/navyifanr
+CSDN: http://blog.csdn.net/navyifanr
+
+
+</div>
+        </div>
+
+    <div class="meta-bottom">
+      <div data-v-6ddd02c6="" class="like"><div data-v-6ddd02c6="" class="btn like-group"><div data-v-6ddd02c6="" class="btn-like"><a data-v-6ddd02c6="">喜欢</a></div> <div data-v-6ddd02c6="" class="modal-wrap"><a data-v-6ddd02c6="">50</a></div></div> <!----></div>
+      <div class="share-group">
+        <a class="share-circle" data-action="weixin-share" data-toggle="tooltip" data-original-title="分享到微信">
+          <i class="iconfont ic-wechat"></i>
+        </a>
+        <a class="share-circle" data-action="weibo-share" data-toggle="tooltip" href="javascript:void((function(s,d,e,r,l,p,t,z,c){var%20f=&#39;http://v.t.sina.com.cn/share/share.php?appkey=1881139527&#39;,u=z||d.location,p=[&#39;&amp;url=&#39;,e(u),&#39;&amp;title=&#39;,e(t||d.title),&#39;&amp;source=&#39;,e(r),&#39;&amp;sourceUrl=&#39;,e(l),&#39;&amp;content=&#39;,c||&#39;gb2312&#39;,&#39;&amp;pic=&#39;,e(p||&#39;&#39;)].join(&#39;&#39;);function%20a(){if(!window.open([f,p].join(&#39;&#39;),&#39;mb&#39;,[&#39;toolbar=0,status=0,resizable=1,width=440,height=430,left=&#39;,(s.width-440)/2,&#39;,top=&#39;,(s.height-430)/2].join(&#39;&#39;)))u.href=[f,p].join(&#39;&#39;);};if(/Firefox/.test(navigator.userAgent))setTimeout(a,0);else%20a();})(screen,document,encodeURIComponent,&#39;&#39;,&#39;&#39;,&#39;http://cwb.assets.jianshu.io/notes/images/15162587/weibo/image_6518c65e4b93.jpg&#39;, &#39;推荐 @cfanr 的文章《Android NDK开发：JNI基础篇》（ 分享自 @简书 ）&#39;,&#39;https://www.jianshu.com/p/ac00d59993aa?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=weibo&#39;,&#39;页面编码gb2312|utf-8默认gb2312&#39;));" data-original-title="分享到微博">
+          <i class="iconfont ic-weibo"></i>
+        </a>
+          <a class="share-circle" data-toggle="tooltip" href="http://cwb.assets.jianshu.io/notes/images/15162587/weibo/image_6518c65e4b93.jpg" target="_blank" data-original-title="下载长微博图片">
+            <i class="iconfont ic-picture"></i>
+          </a>
+        <a class="share-circle more-share" tabindex="0" data-toggle="popover" data-placement="top" data-html="true" data-trigger="focus" href="javascript:void(0);" data-content="
+          &lt;ul class=&quot;share-list&quot;&gt;
+            &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,r=&#39;http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=&#39;+e(&#39;https://www.jianshu.com/p/ac00d59993aa?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=qzone&#39;)+&#39;&amp;title=&#39;+e(&#39;推荐 cfanr 的文章《Android NDK开发：JNI基础篇》&#39;),x=function(){if(!window.open(r,&#39;qzone&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=600,height=600&#39;))location.href=r};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})();&quot;&gt;&lt;i class=&quot;social-icon-sprite social-icon-zone&quot;&gt;&lt;/i&gt;&lt;span&gt;分享到QQ空间&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,r=&#39;https://twitter.com/share?url=&#39;+e(&#39;https://www.jianshu.com/p/ac00d59993aa?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=twitter&#39;)+&#39;&amp;text=&#39;+e(&#39;推荐 cfanr 的文章《Android NDK开发：JNI基础篇》（ 分享自 @jianshucom ）&#39;)+&#39;&amp;related=&#39;+e(&#39;jianshucom&#39;),x=function(){if(!window.open(r,&#39;twitter&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=600,height=600&#39;))location.href=r};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})();&quot;&gt;&lt;i class=&quot;social-icon-sprite social-icon-twitter&quot;&gt;&lt;/i&gt;&lt;span&gt;分享到Twitter&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,r=&#39;https://www.facebook.com/dialog/share?app_id=483126645039390&amp;display=popup&amp;href=https://www.jianshu.com/p/ac00d59993aa?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=facebook&#39;,x=function(){if(!window.open(r,&#39;facebook&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=450,height=330&#39;))location.href=r};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})();&quot;&gt;&lt;i class=&quot;social-icon-sprite social-icon-facebook&quot;&gt;&lt;/i&gt;&lt;span&gt;分享到Facebook&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,r=&#39;https://plus.google.com/share?url=&#39;+e(&#39;https://www.jianshu.com/p/ac00d59993aa?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=google_plus&#39;),x=function(){if(!window.open(r,&#39;google_plus&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=450,height=330&#39;))location.href=r};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})();&quot;&gt;&lt;i class=&quot;social-icon-sprite social-icon-google&quot;&gt;&lt;/i&gt;&lt;span&gt;分享到Google+&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,s1=window.getSelection,s2=d.getSelection,s3=d.selection,s=s1?s1():s2?s2():s3?s3.createRange().text:&#39;&#39;,r=&#39;http://www.douban.com/recommend/?url=&#39;+e(&#39;https://www.jianshu.com/p/ac00d59993aa?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=douban&#39;)+&#39;&amp;title=&#39;+e(&#39;Android NDK开发：JNI基础篇&#39;)+&#39;&amp;sel=&#39;+e(s)+&#39;&amp;v=1&#39;,x=function(){if(!window.open(r,&#39;douban&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=450,height=330&#39;))location.href=r+&#39;&amp;r=1&#39;};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})()&quot;&gt;&lt;i class=&quot;social-icon-sprite social-icon-douban&quot;&gt;&lt;/i&gt;&lt;span&gt;分享到豆瓣&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+          &lt;/ul&gt;
+        " data-original-title="" title="">更多分享</a>
+      </div>
+    </div>
+      <a id="web-note-ad-1" target="_blank" href="https://www.jianshu.com/apps/download?utm_source=nbc"><img src="./Android NDK开发：JNI基础篇 - 简书_files/web-note-ad-1-10f08e404d3887d2d45a4bc8f1831403.png" alt="Web note ad 1"></a>
+    <div><div id="comment-list" class="comment-list"><div><form class="new-comment"><a class="avatar"><img src="./Android NDK开发：JNI基础篇 - 简书_files/avatar_default-78d4d1f68984cd6d4379508dd94b4210.png"></a> <div class="sign-container"><a href="https://www.jianshu.com/sign_in?utm_source=desktop&amp;utm_medium=not-signed-in-comment-form" class="btn btn-sign">登录</a> <span>后发表评论</span></div></form> <!----></div> <div id="normal-comment-list" class="normal-comment-list"><div><!----> <div><div class="top-title"><span>评论</span> <a class="close-btn" style="display: none;">关闭评论</a></div> <div class="no-comment"></div> <div class="text">
+            智慧如你，不想<a href="https://www.jianshu.com/sign_in?utm_source=desktop&amp;utm_medium=not-signed-in-nocomments-text">发表一点想法</a>咩~
+          </div></div> <!----> <div class="comments-placeholder" style="display: none;"><div class="author"><div class="avatar"></div> <div class="info"><div class="name"></div> <div class="meta"></div></div></div> <div class="text"></div> <div class="text animation-delay"></div> <div class="tool-group"><i class="iconfont ic-zan-active"></i><div class="zan"></div> <i class="iconfont ic-list-comments"></i><div class="zan"></div></div></div> </div></div> <!----> <div><!----></div></div></div>
+  </div>
+
+  <div class="side-tool"><ul><li data-placement="left" data-toggle="tooltip" data-container="body" data-original-title="回到顶部" style="display: none;"><a class="function-button"><i class="iconfont ic-backtop"></i></a></li> <!----> <!----> <!----> <li data-placement="left" data-toggle="tooltip" data-container="body" data-original-title="分享文章"><a tabindex="0" role="button" data-toggle="popover" data-placement="left" data-html="true" data-trigger="focus" href="javascript:void(0);" data-content="&lt;ul class=&#39;share-list&#39;&gt;
+                &lt;li&gt;&lt;a class=&quot;weixin-share&quot;&gt;&lt;i class=&quot;social-icon-sprite social-icon-weixin&quot;&gt;&lt;/i&gt;&lt;span&gt;分享到微信&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href=&quot;javascript:void((function(s,d,e,r,l,p,t,z,c){var%20f=&#39;http://v.t.sina.com.cn/share/share.php?appkey=1881139527&#39;,u=z||d.location,p=[&#39;&amp;url=&#39;,e(u),&#39;&amp;title=&#39;,e(t||d.title),&#39;&amp;source=&#39;,e(r),&#39;&amp;sourceUrl=&#39;,e(l),&#39;&amp;content=&#39;,c||&#39;gb2312&#39;,&#39;&amp;pic=&#39;,e(p||&#39;&#39;)].join(&#39;&#39;);function%20a(){if(!window.open([f,p].join(&#39;&#39;),&#39;mb&#39;,[&#39;toolbar=0,status=0,resizable=1,width=440,height=430,left=&#39;,(s.width-440)/2,&#39;,top=&#39;,(s.height-430)/2].join(&#39;&#39;)))u.href=[f,p].join(&#39;&#39;);};if(/Firefox/.test(navigator.userAgent))setTimeout(a,0);else%20a();})(screen,document,encodeURIComponent,&#39;&#39;,&#39;&#39;,&#39;http://cwb.assets.jianshu.io/notes/images/15162587/weibo/image_6518c65e4b93.jpg&#39;, &#39;推荐 @cfanr 的文章《Android NDK开发：JNI基础篇》（ 分享自 @简书 ）&#39;,&#39;https://www.jianshu.com/p/ac00d59993aa?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=weibo&#39;,&#39;页面编码gb2312|utf-8默认gb2312&#39;));&quot;&gt;&lt;i class=&#39;social-icon-sprite social-icon-weibo&#39;&gt;&lt;/i&gt;&lt;span&gt;分享到微博&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href=&quot;http://cwb.assets.jianshu.io/notes/images/15162587/weibo/image_6518c65e4b93.jpg&quot; target=&quot;_blank&quot;&gt;&lt;i class=&quot;social-icon-sprite social-icon-picture&quot;&gt;&lt;/i&gt;&lt;span&gt;下载长微博图片&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,r=&#39;http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=&#39;+e(&#39;https://www.jianshu.com/p/ac00d59993aa?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=qzone&#39;)+&#39;&amp;title=&#39;+e(&#39;推荐 cfanr 的文章《Android NDK开发：JNI基础篇》&#39;),x=function(){if(!window.open(r,&#39;qzone&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=600,height=600&#39;))location.href=r};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})();&quot;&gt;&lt;i class=&#39;social-icon-sprite social-icon-zone&#39;&gt;&lt;/i&gt;&lt;span&gt;分享到QQ空间&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,r=&#39;https://twitter.com/share?url=&#39;+e(&#39;https://www.jianshu.com/p/ac00d59993aa?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=twitter&#39;)+&#39;&amp;text=&#39;+e(&#39;推荐 cfanr 的文章《Android NDK开发：JNI基础篇》（ 分享自 @jianshucom ）&#39;)+&#39;&amp;related=&#39;+e(&#39;jianshucom&#39;),x=function(){if(!window.open(r,&#39;twitter&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=600,height=600&#39;))location.href=r};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})();&quot;&gt;&lt;i class=&#39;social-icon-sprite social-icon-twitter&#39;&gt;&lt;/i&gt;&lt;span&gt;分享到Twitter&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,r=&#39;https://www.facebook.com/dialog/share?app_id=483126645039390&amp;display=popup&amp;href=https://www.jianshu.com/p/ac00d59993aa?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=facebook&#39;,x=function(){if(!window.open(r,&#39;facebook&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=450,height=330&#39;))location.href=r};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})();&quot;&gt;&lt;i class=&#39;social-icon-sprite social-icon-facebook&#39;&gt;&lt;/i&gt;&lt;span&gt;分享到Facebook&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,r=&#39;https://plus.google.com/share?url=&#39;+e(&#39;https://www.jianshu.com/p/ac00d59993aa?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=google_plus&#39;),x=function(){if(!window.open(r,&#39;google_plus&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=450,height=330&#39;))location.href=r};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})();&quot;&gt;&lt;i class=&#39;social-icon-sprite social-icon-google&#39;&gt;&lt;/i&gt;&lt;span&gt;分享到Google+&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,s1=window.getSelection,s2=d.getSelection,s3=d.selection,s=s1?s1():s2?s2():s3?s3.createRange().text:&#39;&#39;,r=&#39;http://www.douban.com/recommend/?url=&#39;+e(&#39;https://www.jianshu.com/p/ac00d59993aa?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=douban&#39;)+&#39;&amp;title=&#39;+e(&#39;Android NDK开发：JNI基础篇&#39;)+&#39;&amp;sel=&#39;+e(s)+&#39;&amp;v=1&#39;,x=function(){if(!window.open(r,&#39;douban&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=450,height=330&#39;))location.href=r+&#39;&amp;r=1&#39;};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})()&quot;&gt;&lt;i class=&#39;social-icon-sprite social-icon-douban&#39;&gt;&lt;/i&gt;&lt;span&gt;分享到豆瓣&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+              &lt;/ul&gt;" data-original-title="" title="" class="function-button"><i class="iconfont ic-share"></i></a> <!----></li> <!----></ul></div>
+</div>
+<div class="note-bottom">
+  <div><div class="main"><div class="title">被以下专题收入，发现更多相似内容</div> <!----> <div class="include-collection"><!----> <a href="https://www.jianshu.com/c/ddfd0f9bb992?utm_source=desktop&amp;utm_medium=notes-included-collection" target="_blank" class="item"><img src="./Android NDK开发：JNI基础篇 - 简书_files/adce8d3e809bf137183598885225e74e.jpg"><div class="name">Android...</div></a><a href="https://www.jianshu.com/c/58b4c20abf2f?utm_source=desktop&amp;utm_medium=notes-included-collection" target="_blank" class="item"><img src="./Android NDK开发：JNI基础篇 - 简书_files/android.graphics.Bitmap_1329dce8.jpeg"><div class="name">Android...</div></a><a href="https://www.jianshu.com/c/0f8bf9ffd608?utm_source=desktop&amp;utm_medium=notes-included-collection" target="_blank" class="item"><img src="./Android NDK开发：JNI基础篇 - 简书_files/Android_L.jpg"><div class="name">Android...</div></a><a href="https://www.jianshu.com/c/5139d555c94d?utm_source=desktop&amp;utm_medium=notes-included-collection" target="_blank" class="item"><img src="./Android NDK开发：JNI基础篇 - 简书_files/1416528891_3612.png"><div class="name">Android...</div></a><a href="https://www.jianshu.com/c/d1591c322c89?utm_source=desktop&amp;utm_medium=notes-included-collection" target="_blank" class="item"><img src="./Android NDK开发：JNI基础篇 - 简书_files/android.graphics.Bitmap_15f127c2.jpeg"><div class="name">Android开发</div></a><a href="https://www.jianshu.com/c/3fde3b545a35?utm_source=desktop&amp;utm_medium=notes-included-collection" target="_blank" class="item"><img src="./Android NDK开发：JNI基础篇 - 简书_files/android.graphics.Bitmap_3d178cba.jpeg"><div class="name">Android知识</div></a><a href="https://www.jianshu.com/c/4688bad2bca2?utm_source=desktop&amp;utm_medium=notes-included-collection" target="_blank" class="item"><img src="./Android NDK开发：JNI基础篇 - 简书_files/android.graphics.Bitmap_d4acfdc.jpeg"><div class="name">Android...</div></a> <a class="show-more">
+        展开更多
+        <i class="iconfont ic-show"></i></a></div></div> <!----> <!----></div>
+  <div><div class="recommend-note"><div class="meta"><div class="title">
+        推荐阅读
+        <a target="_blank" href="https://www.jianshu.com/" class="more">
+           更多精彩内容<i class="iconfont ic-link"></i></a></div></div> <div class="list"><div class="note"><!----> <a target="_blank" href="https://www.jianshu.com/p/d084ffceda40?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=pc_all_hots&amp;utm_source=recommendation" class="title">七月总结</a> <p class="description">都八月中旬的了，才写七月总结，可见有多懒/(ㄒoㄒ)/~~，想停止掉，又觉得可惜…… 呃，也是时候给简书这个后花园一个交代了…… 最近一个多月一直没及时更新简书，是由于刚找到工作，需要开始慢慢适应这种生活，晚上工作回来后比较少时间，而且最近要经常加班，所以没处理好个人独立思考的时间……说多了，其实就是懒，拖延。。。下面的总结做个个人批斗会吧o(╯□╰)o 工作也将近一个月了，虽然上个月有对自己找工作和日常信息处理有做一些思考总结，但却没做好，另外，很多好习惯都一直恢复不了，还有一些个人能力提升方面的工作也没做好： 1.信息极简化问题:虽然尽量减少信息的来源了，但可能时间和效率的问题，却没...</p> <a target="_blank" href="https://www.jianshu.com/u/134f7552aa7e?utm_campaign=maleskine&amp;utm_content=user&amp;utm_medium=pc_all_hots&amp;utm_source=recommendation" class="author"><div class="avatar" style="background-image: url(&quot;//upload.jianshu.io/users/upload_avatars/36817/2c2ecf02d9b5.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/24/h/24&quot;);"></div> <span class="name">cfanr</span></a></div><div class="note have-img"><a target="_blank" href="https://www.jianshu.com/p/fcc1259b4933?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=pc_all_hots&amp;utm_source=recommendation" class="cover" style="background-image: url(&quot;//upload-images.jianshu.io/upload_images/36817-2bae3538cd7ae1fd.png?imageMogr2/auto-orient/strip|imageView2/1/w/300/h/240&quot;);"></a> <a target="_blank" href="https://www.jianshu.com/p/fcc1259b4933?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=pc_all_hots&amp;utm_source=recommendation" class="title">得到日课-4：自私的基因</a> <p class="description">薛兆丰的北大经济学课 第20周问答 | 为什么人类的未来不可预测？1.资产价格不可预测世界的所有商品分为两种：耐用品和易耗品。耐用品的现值跟它过去的投入没有关系，沉没成本不是成本，它只跟未来收入有关。预期的改变本身是随机发生的，所以价格的变化也是随机发生的。不可以预测。 2.人类的未来不可预测 哪怕是那些坚信人类的未来已经被决定了的人都会同意，人类的知识、人类对世界的看法，对人的行动都会有所影响； 人类的知识本身是增长的，总有一些事情是明天才知道，今天不知道的。否则，知识就没有增长了，总有一个知识的增量吧； 这个只有明天才知道、今天不知道的知识增量，也对人类的行为有影响，而它就不可预测，...</p> <a target="_blank" href="https://www.jianshu.com/u/134f7552aa7e?utm_campaign=maleskine&amp;utm_content=user&amp;utm_medium=pc_all_hots&amp;utm_source=recommendation" class="author"><div class="avatar" style="background-image: url(&quot;//upload.jianshu.io/users/upload_avatars/36817/2c2ecf02d9b5.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/24/h/24&quot;);"></div> <span class="name">cfanr</span></a></div><div class="note have-img"><a target="_blank" href="https://www.jianshu.com/p/63baa2bf6851?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=pc_all_hots&amp;utm_source=recommendation" class="cover" style="background-image: url(&quot;//upload-images.jianshu.io/upload_images/6510782-fe98dedefb23b699.png?imageMogr2/auto-orient/strip|imageView2/1/w/300/h/240&quot;);"></a> <a target="_blank" href="https://www.jianshu.com/p/63baa2bf6851?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=pc_all_hots&amp;utm_source=recommendation" class="title">从写作小白到简书签约作者我经历了什么？</a> <p class="description">3月13日下午，正在上班的我，收到了简书的官方邀请，成为简书的签约作者。刚看到这个邀请时，我真是激动万分，简直不敢相信这是真的。 现在几天时间过去了，我还清晰地记得当时的每一个情景。我把老师发来的信息读了一遍又遍，脑海中一片空白，要不是在上班，我真的会高兴得跳起来。 我第一时间向老师们报告了喜讯，以表达我对他们感恩之情。那一天的晚上，我激动得几乎一夜没有未眠。付出了那么多的努力，我终于得到了回报，我的作品终于得到了平台的认可。 那一夜，我迟迟未眠，生怕这是一场梦，一觉醒来后一切都会恢复到现实。 第二天清晨，当闹铃响起的时候，我依旧像往常一样早起写作。下午，当简友向我发来祝贺时，我才发现自...</p> <a target="_blank" href="https://www.jianshu.com/u/d34dd83e80d7?utm_campaign=maleskine&amp;utm_content=user&amp;utm_medium=pc_all_hots&amp;utm_source=recommendation" class="author"><div class="avatar" style="background-image: url(&quot;//upload.jianshu.io/users/upload_avatars/6510782/6af6f6b4-a9bb-4b4e-8947-907bbc66b063.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/24/h/24&quot;);"></div> <span class="name">心缘育儿</span></a></div><div class="note have-img"><a target="_blank" href="https://www.jianshu.com/p/caa6cf96143e?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=pc_all_hots&amp;utm_source=recommendation" class="cover" style="background-image: url(&quot;//upload-images.jianshu.io/upload_images/9132321-a85e34171ba703db.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/300/h/240&quot;);"></a> <a target="_blank" href="https://www.jianshu.com/p/caa6cf96143e?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=pc_all_hots&amp;utm_source=recommendation" class="title">“我怕不合群会孤独，更怕大学被辜负”</a> <p class="description">2018年3月3日  星期六  天气预报 文＃阿呗 曾第一次与人谈论到底该不该合群时，他发来一段话，说是鲁迅说的。 “猛兽总是独行，牛羊才成群结队。” 我笑了笑，没有接话。 道理我何曾不懂，但我却更能深刻的体会到那种孤寂，我怎么会不怕自己的平庸，我只是受够了孤独。想了许久，脑海里的画面也飘过很多，突然想说。 一个人真的没那么好过。 一直以来，有太多太多的人告诉我，优秀的人，从不合群的。他们说，不合群是一种美德，甚至被传为神话，不合群的人似乎被贴上了一种标签，那就是优秀。 我怕不合群会孤独，但我更怕大学被辜负。 冷汗从脊背流下，突然觉得这个世界好像病了，在里面生活的人，也病了，而且还是病入...</p> <a target="_blank" href="https://www.jianshu.com/u/bfb1aa483a03?utm_campaign=maleskine&amp;utm_content=user&amp;utm_medium=pc_all_hots&amp;utm_source=recommendation" class="author"><div class="avatar" style="background-image: url(&quot;//upload.jianshu.io/users/upload_avatars/9132321/4ed54fce-9d7d-4788-ab34-f6c955758597.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/24/h/24&quot;);"></div> <span class="name">阿哔有个帅阿呗</span></a></div><div class="note have-img"><a target="_blank" href="https://www.jianshu.com/p/b83c320ce0f6?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=pc_all_hots&amp;utm_source=recommendation" class="cover" style="background-image: url(&quot;//upload-images.jianshu.io/upload_images/4226612-8c1cadc620141c7d.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/300/h/240&quot;);"></a> <a target="_blank" href="https://www.jianshu.com/p/b83c320ce0f6?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=pc_all_hots&amp;utm_source=recommendation" class="title">杀手没有性生活</a> <p class="description">1 漆七刚入行的时候，师傅就跟他说过，干这一行，有两样东西不能沾。 一是酒，二是色。 酒能麻痹人的神经，打乱人的性情，色会腐蚀人的心智，降低人的判断力。 酒后乱性，色令智昏说的就是这个意思。 而做这一行，随时随地保持机警、冷静、敏锐和毫发无误的精准判断力，是最基本的要求。 稍有松懈，略出差池，任务失败、招牌被砸是小事，说不定还会搭上自己的小命。 师傅说的话，总是很有道理的样子。 漆七自从十二岁被师傅捡到，收入门下，开始他的杀手生涯，就谨记师傅的教诲，没喝过酒，也没和女人睡过觉。 一晃又过了十二年。 漆七早已经出道，并完成了不少趟任务。 漆七完成的任务，有的很艰巨，有的很容易。 不管难易程...</p> <a target="_blank" href="https://www.jianshu.com/u/cb272a36d4d7?utm_campaign=maleskine&amp;utm_content=user&amp;utm_medium=pc_all_hots&amp;utm_source=recommendation" class="author"><div class="avatar" style="background-image: url(&quot;//upload.jianshu.io/users/upload_avatars/4226612/2a3ae0ab-19ff-49b3-b0e9-4c1f5f77edb4.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/24/h/24&quot;);"></div> <span class="name">黄咚咚</span></a></div></div></div></div>
+  <!-- 相关文章 -->
+  <div class="seo-recommended-notes">
+
+        <div class="note have-img">
+          <a class="cover" target="_blank" href="https://www.jianshu.com/p/cd038167d896?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+            <img src="./Android NDK开发：JNI基础篇 - 简书_files/5713484-e97d1c6d6d94e4a4.png" alt="240">
+</a>          <a class="title" target="_blank" href="https://www.jianshu.com/p/cd038167d896?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">Android跨进程通信IPC之3——关于"JNI"的那些事</a>
+          <p class="description">Android跨进程通信IPC整体内容如下 1、Android跨进程通信IPC之1——Linux基础2、Android跨进程通信IPC之2——Bionic3、Android跨进程通信IPC之3——关于"JNI"的那些事4、Android跨进程通信IPC之4——Android...</p>
+          <a class="author" target="_blank" href="https://www.jianshu.com/u/8b9c629f69dd?utm_campaign=maleskine&amp;utm_content=user&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+            <div class="avatar">
+              <img src="./Android NDK开发：JNI基础篇 - 简书_files/0dbe60df-26f7-4174-a821-e1e7eea864c4.jpeg" alt="48">
+            </div>
+            <span class="name">隔壁老李头</span>
+</a>        </div>
+
+        <div class="note ">
+                    <a class="title" target="_blank" href="https://www.jianshu.com/p/5f5d7f132c53?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">[转] Android JNI 作用及其详解 </a>
+          <p class="description">_ 声明: 对原文格式以及内容做了细微的修改和美化, 主要为了方便阅读和理解 _ 一. 基础 Java Native Interface (JNI) 标准是Java平台的一部分，它允许Java代码和其他语言写的代码进行交互。JNI 是本地编程接口，它使得在 Java 虚拟机...</p>
+          <a class="author" target="_blank" href="https://www.jianshu.com/u/5c920c5e11be?utm_campaign=maleskine&amp;utm_content=user&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+            <div class="avatar">
+              <img src="./Android NDK开发：JNI基础篇 - 简书_files/6e2dc0fb6a8d.png" alt="48">
+            </div>
+            <span class="name">元亨利贞o</span>
+</a>        </div>
+
+        <div class="note ">
+                    <a class="title" target="_blank" href="https://www.jianshu.com/p/aba734d5b5cd?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">Android JNI编程—JNI基础</a>
+          <p class="description">最近看到了很多关于热补的开源项目——Depoxed(阿里)、AnFix（阿里）、DynamicAPK(携程)等，它们都用到了JNI编程，并且JNI编程也贯穿了Android系统，学会JNI编程对于我们学习研究Android源码、Android安全以及Android安全加固等...</p>
+          <a class="author" target="_blank" href="https://www.jianshu.com/u/071991caaf4e?utm_campaign=maleskine&amp;utm_content=user&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+            <div class="avatar">
+              <img src="./Android NDK开发：JNI基础篇 - 简书_files/04f6008bb5ac.jpg" alt="48">
+            </div>
+            <span class="name">SongNick</span>
+</a>        </div>
+
+        <div class="note ">
+                    <a class="title" target="_blank" href="https://www.jianshu.com/p/464cd879eaba?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">Android NDK开发：JNI实战篇</a>
+          <p class="description">注：原文地址 紧接上篇：Android NDK开发：JNI基础篇 | cfanr，这篇主要介绍 JNI Native 层调用Java 层的代码（涉及JNI 数据类型映射和描述符的使用）和如何动态注册 JNI。 1. Hello World NDK 在开始实战练习前，你需要先...</p>
+          <a class="author" target="_blank" href="https://www.jianshu.com/u/134f7552aa7e?utm_campaign=maleskine&amp;utm_content=user&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+            <div class="avatar">
+              <img src="./Android NDK开发：JNI基础篇 - 简书_files/2c2ecf02d9b5(1).jpg" alt="48">
+            </div>
+            <span class="name">cfanr</span>
+</a>        </div>
+
+        <div class="note ">
+                    <a class="title" target="_blank" href="https://www.jianshu.com/p/b294b3878192?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">Android Jni/NDK 开发入门详解</a>
+          <p class="description">本人为初学者，文章写得不好，如有错误，请大力怼我 或者看这里 如何使用jni进行开发 本文主要针对Android环境进行NDK\Native\Jni开发进行介绍 使用2.2版本之前的Android Studio进行ndk开发是比较繁琐的，如果你还在使用旧版本的Android...</p>
+          <a class="author" target="_blank" href="https://www.jianshu.com/u/5d6b4ef4b4f5?utm_campaign=maleskine&amp;utm_content=user&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+            <div class="avatar">
+              <img src="./Android NDK开发：JNI基础篇 - 简书_files/7bf77152-0ce2-4880-8bd5-a66338b878e5.jpeg" alt="48">
+            </div>
+            <span class="name">AlbertHumbert</span>
+</a>        </div>
+
+        <div class="note ">
+                    <a class="title" target="_blank" href="https://www.jianshu.com/p/fdedc00e4c2a?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">[Emacs] Emacs之魂（一）：开篇</a>
+          <p class="description">程序员大部分的时间都是在和代码打交道，因此，对于文本编辑器一定不会陌生了。编辑器是处理文本的工具。 就像趁手的兵器对武林高手的辅助作用一样，强大的编辑器也会使编码工作事半功倍，趣味十足。 可是，什么样的编辑器可以称之为强大呢？江湖中，流传着关于两大编辑器的传说， 有关最强编...</p>
+          <a class="author" target="_blank" href="https://www.jianshu.com/u/f6393998072f?utm_campaign=maleskine&amp;utm_content=user&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+            <div class="avatar">
+              <img src="./Android NDK开发：JNI基础篇 - 简书_files/5f9e2a038d7c.jpg" alt="48">
+            </div>
+            <span class="name">何幻</span>
+</a>        </div>
+
+        <div class="note ">
+                    <a class="title" target="_blank" href="https://www.jianshu.com/p/36abff1580c2?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">灵感迸发</a>
+          <p class="description">最近在项目工地上，陪同监理dick指导工作，边工作边听得到超级个体，不务正业了，可是没影响工作，老外也没意见，所以说时间算是充分利用了起来。时不时会思考，如何结合跨学科的信息与知识，融汇起来，形成自己的创新思维与管理方法。 比如说，小到工作方法与使用工具，工作方法，使用管理...</p>
+          <a class="author" target="_blank" href="https://www.jianshu.com/u/8392809a5db5?utm_campaign=maleskine&amp;utm_content=user&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+            <div class="avatar">
+              <img src="./Android NDK开发：JNI基础篇 - 简书_files/76a17cc71058" alt="48">
+            </div>
+            <span class="name">美喜猪儿</span>
+</a>        </div>
+
+        <div class="note ">
+                    <a class="title" target="_blank" href="https://www.jianshu.com/p/ef71a4725a7c?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">自由书写0217</a>
+          <p class="description">当我看到问题的时候，我就在成为问题制造的一部分。为什么我觉得付钱付1200多去买衣服是一个问题？我经常处于做还是不做的纠结犹豫中，很多事都是这样，总是要想很久，想在大脑里预演做，然后是预演不做，然后又会各自纠结于做还是不做，做了有哪些不好不做有哪些不好，我买衣服的时候，其实...</p>
+          <a class="author" target="_blank" href="https://www.jianshu.com/u/9875a59cf4af?utm_campaign=maleskine&amp;utm_content=user&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+            <div class="avatar">
+              <img src="./Android NDK开发：JNI基础篇 - 简书_files/b0ecd465ea9d.jpg" alt="48">
+            </div>
+            <span class="name">我真的什么都不知道</span>
+</a>        </div>
+
+        <div class="note ">
+                    <a class="title" target="_blank" href="https://www.jianshu.com/p/79afd063066e?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">9.改变的时间成本</a>
+          <p class="description">1、女人的改变 中午翻到很多以前旅游的照片，曾经也是女汉子一枚，那个清汤寡水稚嫩的自己也看不下去。当时的我是怎么忍受着过每一天的，我想问问以前的自己。 Z.D.从新加坡回来之后第一句话就说“你比以前有女人味了”。是啊，这样的女人味琢磨了很久。打耳洞折磨了一年多，刚开始在老家...</p>
+          <a class="author" target="_blank" href="https://www.jianshu.com/u/a40bbc8ab953?utm_campaign=maleskine&amp;utm_content=user&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+            <div class="avatar">
+              <img src="./Android NDK开发：JNI基础篇 - 简书_files/13-394c31a9cb492fcb39c27422ca7d2815.jpg" alt="48">
+            </div>
+            <span class="name">归0</span>
+</a>        </div>
+  </div>
+</div>
+
+    <script type="application/json" data-name="page-data">{"user_signed_in":false,"locale":"zh-CN","os":"windows","read_mode":"day","read_font":"font2","note_show":{"is_author":false,"is_following_author":false,"is_liked_note":false,"follow_state":0,"uuid":"2b6f0039-a222-45b8-a286-4b4a7cfaea85"},"note":{"id":15162587,"slug":"ac00d59993aa","user_id":36817,"notebook_id":441594,"commentable":true,"likes_count":50,"views_count":8091,"public_wordage":3998,"comments_count":0,"featured_comments_count":0,"total_rewards_count":1,"is_author":false,"paid_type":"free","paid":false,"paid_content_accessible":false,"author":{"nickname":"cfanr","total_wordage":132898,"followers_count":437,"total_likes_count":2256}}}</script>
+    
+    <script src="./Android NDK开发：JNI基础篇 - 简书_files/babel-polyfill-e9c9b9785eb2c39c58e4.js" crossorigin="anonymous"></script>
+    <script src="./Android NDK开发：JNI基础篇 - 简书_files/web-base-2d541906cef5dcf0fd22.js" crossorigin="anonymous"></script>
+<script src="./Android NDK开发：JNI基础篇 - 简书_files/web-211e04d27fb3d9764421.js" crossorigin="anonymous"></script>
+    
+    <script src="./Android NDK开发：JNI基础篇 - 简书_files/entry-086fe40459dbedd0b3b8.js" crossorigin="anonymous"></script>
+    <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+  
+
+<!----><!----><a style="display:none" href="https://www.jianshu.com/p/ac00d59993aa#" id="ironman123ironman123_a"></a><div style="display:none" id="ironmanuidironmanuid">MTQ1Mjg0NzE3ODg2MjAuNTY2MTgxNjA1MjE2MTE1Nw==</div><div style="display:none" id="ironman456ironman456">0.68</div><div style="display:none" id="ironman123ironman123">_ga=GA1.2.878475683.1509951494;Hm_lvt_0c0e9d9b1e7d617b3e6842e85b9fb068=1526437882,1526460685,1526952053;Hm_lpvt_0c0e9d9b1e7d617b3e6842e85b9fb068=1526952053;sensorsdata2015jssdkcross=%7B%22distinct_id%22%3A%2215f901f5882144-0f54d6a44bccf4-6b1b1279-2073600-15f901f588427d%22%2C%22%24device_id%22%3A%2215f901f5882144-0f54d6a44bccf4-6b1b1279-2073600-15f901f588427d%22%2C%22props%22%3A%7B%22%24latest_traffic_source_type%22%3A%22%E8%87%AA%E7%84%B6%E6%90%9C%E7%B4%A2%E6%B5%81%E9%87%8F%22%2C%22%24latest_referrer%22%3A%22https%3A%2F%2Fwww.baidu.com%2Flink%22%2C%22%24latest_referrer_host%22%3A%22www.baidu.com%22%2C%22%24latest_search_keyword%22%3A%22%E6%9C%AA%E5%8F%96%E5%88%B0%E5%80%BC%22%7D%7D;</div><div style="display:none" id="ironman123subironman123sub"></div></body></html>
